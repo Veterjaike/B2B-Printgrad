@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  b2b-frontend:
+    image: ghcr.io/<твой_пользователь>/<репозиторий>:latest
+    container_name: b2b-frontend
+    ports:
+      - "80:80"
+    restart: unless-stopped
