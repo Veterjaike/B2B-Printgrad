@@ -1,13 +1,16 @@
-version: '3'
+version: "3.8"
+
 services:
-  backend:
-    build:
-      context: ./backend
-    ports:
-      - "4000:4000"
   frontend:
     build:
-      context: ./frontend
+      context: .
+      dockerfile: frontend.Dockerfile
+    ports:
+      - "80:80"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
     ports:
       - "3000:3000"
-    command: ["npm", "run", "dev"]
