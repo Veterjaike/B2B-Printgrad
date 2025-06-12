@@ -31,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
-          file: ../frontend.Dockerfile
+          file: Dockerfile
           push: true
           tags: ghcr.io/veterjaike/b2b-printgrad-frontend:latest
 
@@ -39,6 +39,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./backend
-          file: ../backend.Dockerfile
+          file: Dockerfile
           push: true
           tags: ghcr.io/veterjaike/b2b-printgrad-backend:latest
