@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   b2b-frontend:
-    image: ghcr.io/veterjaike/B2B-Printgrad:latest
+    image: ghcr.io/veterjaike/b2b-printgrad:latest
     container_name: b2b-frontend
     ports:
       - "80:80"
