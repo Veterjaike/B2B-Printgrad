@@ -42,3 +42,4 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: ghcr.io/veterjaike/b2b-printgrad-backend:latest
+          
