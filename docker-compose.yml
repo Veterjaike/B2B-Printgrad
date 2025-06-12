@@ -1,9 +1,13 @@
-version: '3.8'
-
+version: '3'
 services:
-  b2b-frontend:
-    image: ghcr.io/veterjaike/b2b-printgrad:latest
-    container_name: b2b-frontend
+  backend:
+    build:
+      context: ./backend
     ports:
-      - "80:80"
-    restart: unless-stopped
+      - "4000:4000"
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    command: ["npm", "run", "dev"]
