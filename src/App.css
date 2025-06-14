@@ -1,0 +1,36 @@
+#root {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  color: #429aa2;
+}
+
+.header {
+  margin: 0 0 20px 0;
+  height: auto;
+  background-color: #f3f3f3;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header__logo {
+  font-size: 30px;
+}
+
+.header__nav {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
