@@ -6,19 +6,20 @@ import About from './pages/About.jsx';
 import Registration from './pages/Registration.jsx';
 import Login from './pages/Login.jsx';
 import './App.css'
+import './index.css'
 
 function App() {
   return (
     <BrowserRouter>
-      <header class="header">
-        <div class="container">
-          <div class="header__inner">
-            <Link className="header__logo" to="/">Принтград</Link>
-            <div class="header__inner-wrapper">
-              <ul class="header__nav">
-                <li class="header__naw-item"><Link className="header__naw-item-link" to="/tasks">Просмотреть задачи</Link></li>
-                <li class="header__naw-item"><Link className="header__naw-item-link" to="/about">О нас</Link></li>
-                <li class="header__naw-item"><Link className="header__naw-item-link" to="/login">Войти в кабинет</Link></li>
+      <header className="header">
+        <div className="container">
+          <div className="header__inner">
+            <Link className="header__logo" to="/">Принтград-work</Link>
+            <div className="header__inner-wrapper">
+              <ul className="header__nav">
+                <li className="header__nav-item"><Link className="header__nav-item-link" to="/tasks">Просмотреть задачи</Link></li>
+                <li className="header__nav-item"><Link className="header__nav-item-link" to="/about">О нас</Link></li>
+                <li className="header__nav-item"><Link className="header__nav-item-link" to="/login">Войти в кабинет</Link></li>
               </ul>
             </div>
           </div>

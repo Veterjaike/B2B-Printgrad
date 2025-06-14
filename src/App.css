@@ -8,9 +8,11 @@ a {
 }
 
 .header {
+  padding: 10px;
   margin: 0 0 20px 0;
   height: auto;
   background-color: #f3f3f3;
+  min-width: 460px;
 }
 
 .container {
@@ -19,6 +21,7 @@ a {
 }
 
 .header__inner {
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,6 +34,32 @@ a {
 .header__nav {
   list-style-type: none;
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   gap: 10px;
+  margin: 0;
+}
+
+.header__nav-item {
+  margin: 0;
+  padding: 0;
+}
+
+.header__nav-item-link {
+  text-align: center;
+  display: block;
+  width: 180px;
+  margin: 0;
+  border: 2px solid #429aa2;
+  padding: 7px;
+  border-radius: 5px;
+  transition: all 0.5s;
+}
+
+.header__nav-item-link:hover {
+  background-color: #429aa2;
+  color: #ffffff;
+}
+
+.header__nav-item-link:active {
+  border: 2px solid #000000;
 }
