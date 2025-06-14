@@ -17,7 +17,7 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           script: |
-            PROJECT_DIR="/home/ubuntu/B2B-Printgrad"
+            PROJECT_DIR="/home/veterjaike/B2B-Printgrad"
             REPO_URL="git@github.com:Veterjaike/B2B-Printgrad.git"
 
             if [ ! -d "$PROJECT_DIR" ]; then
@@ -32,4 +32,3 @@ jobs:
             cd "$PROJECT_DIR"
             docker compose down
             docker compose up -d --build
-            
