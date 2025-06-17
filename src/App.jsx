@@ -1,39 +1,29 @@
-// App.jsx
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import Home from './pages/Home.jsx';
-import Tasks from './pages/Tasks.jsx';
-import About from './pages/About.jsx';
-import Registration from './pages/Registration.jsx';
-import Login from './pages/Login.jsx';
-import './App.css'
-import './index.css'
+import React, { useEffect, useState } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import Header from './components/Header';
+import Home from './pages/Home';
+import './App.css';
 
 function App() {
-  return (
-    <BrowserRouter>
-      <header className="header">
-        <div className="container">
-          <div className="header__inner">
-            <Link className="header__logo" to="/">Принтград-work</Link>
-            <div className="header__inner-wrapper">
-              <ul className="header__nav">
-                <li className="header__nav-item"><Link className="header__nav-item-link" to="/tasks">Просмотреть задачи</Link></li>
-                <li className="header__nav-item"><Link className="header__nav-item-link" to="/about">О нас</Link></li>
-                <li className="header__nav-item"><Link className="header__nav-item-link" to="/login">Войти в кабинет</Link></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </header>
+  const location = useLocation();
+  const [fade, setFade] = useState(true);
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registration" element={<Registration />} />
-      </Routes>
-    </BrowserRouter>
+  useEffect(() => {
+    setFade(false);
+    const timeout = setTimeout(() => setFade(true), 50);
+    return () => clearTimeout(timeout);
+  }, [location.pathname]);
+
+  return (
+    <>
+      <Header />
+      <main className={`page-transition ${fade ? 'fade-in' : 'fade-out'}`}>
+        <Routes location={location}>
+          <Route path="/" element={<Home />} />
+          {/* Добавь другие страницы здесь */}
+        </Routes>
+      </main>
+    </>
   );
 }
 
