@@ -57,20 +57,18 @@
     }
 
     .header .container {
-        gap: 10px;
-    }
-
-    .header__logo-text {
-        display: block;
-        font-size: 14px;
+        gap: 3px;
+        flex-direction: column;
+        align-content: center;
     }
 
     .header__nav {
-        gap: 10px;
+        gap: 5px;
+        justify-content: center;
     }
 
     .btn {
-        min-width: 10vw;
+        width: 40vw;
         height: 4vh;
         padding: 5px;
     }
