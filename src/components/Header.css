@@ -53,7 +53,7 @@
 
 @media (max-width: 480px) {
     .header {
-        padding: 5px;
+        padding: 0 5px;
     }
 
     .header .container {

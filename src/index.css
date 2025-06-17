@@ -47,3 +47,8 @@ a {
   color: #20a8b1;
 }
 
+@media (max-width: 480px) {
+  .container {
+    padding: 5px;
+  }
+}
