@@ -12,7 +12,7 @@ export default function MainService() {
                     <p className="main-content__left-text">Мы широкопрофильная компания<br /> на рынке сервисных ИТ-услуг</p>
                     <div className="main-content__left-wrapper">
                         <a className="main-content__left-wrapper-link btn"
-                            href="http://http://95.31.48.48/profile">Начать зарабатывать<br />с нами</a>
+                            href="http://95.31.48.48/profile">Начать зарабатывать<br />с нами</a>
                     </div>
                 </div>
                 <div className="main-content__right">
