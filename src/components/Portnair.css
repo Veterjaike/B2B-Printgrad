@@ -24,3 +24,25 @@
     width: 12vw;
     height: 12vh;
 }
+
+@media (max-width: 480px) {
+
+    .portairs {
+        padding: 5px;
+    }
+
+    .portnairs__text {
+        font-size: 8vw;
+        margin: 0 0 20px 0;
+    }
+
+    .portnairs__list {
+        gap: 20px;
+    }
+
+    .portnairs__list-item-img {
+        width: 12vw;
+        height: 3vh;
+    }
+
+}

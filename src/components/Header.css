@@ -28,7 +28,6 @@
 }
 
 .btn {
-    font-weight: bold;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,4 +49,30 @@
 
 .btn:active {
     border: 2px solid #000000;
+}
+
+@media (max-width: 480px) {
+    .header {
+        padding: 5px;
+    }
+
+    .header .container {
+        gap: 10px;
+    }
+
+    .header__logo-text {
+        display: block;
+        font-size: 14px;
+    }
+
+    .header__nav {
+        gap: 10px;
+    }
+
+    .btn {
+        min-width: 10vw;
+        height: 4vh;
+        padding: 5px;
+    }
+
 }

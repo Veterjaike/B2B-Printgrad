@@ -72,3 +72,30 @@
     margin: 0;
     padding: 0;
 }
+
+@media (max-width: 480px) {
+    .main-content__right {
+        display: none;
+    }
+
+    .main-content__left {
+        width: 100%;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .main-content__left-heading {
+        font-size: 7vw;
+        text-align: center;
+    }
+
+    .main-content__left-text {
+        font-size: 4vw;
+        text-align: center;
+    }
+
+    .main-content__left-wrapper-link {
+        width: 60vw;
+        font-size: 5vw;
+    }
+}

@@ -7,7 +7,7 @@ export default function Header() {
         <header className='header'>
             <div className="container">
                 <div className="header__logo">
-                    <a className="header__logo-text" href='/'>Принтград B2B</a>
+                    <a className="header__logo-text" href='/'>Принтград-b2b</a>
                 </div>
                 <nav className='header__nav'>
                     <Link className='header__nav-link btn' to="/" >Главная</Link>
