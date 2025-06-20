@@ -1,0 +1,16 @@
+.profile-name {
+    margin: 0;
+    padding: 20px;
+}
+
+
+.profile-name__heading {
+    text-align: center;
+    margin: 0 0 20px 0;
+}
+
+.profile-name__wrapper {
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 40px;
+}

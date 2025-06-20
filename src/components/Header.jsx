@@ -11,8 +11,8 @@ export default function Header() {
                 </div>
                 <nav className='header__nav'>
                     <Link className='header__nav-link btn' to="/" >Главная</Link>
-                    <Link className='header__nav-link btn' to="/orders" >Заказы</Link>
-                    <Link className='header__nav-link btn' to="/orders" >Мой календарь</Link>
+                    <Link className='header__nav-link btn' to="/orders" >Все заказы</Link>
+                    <Link className='header__nav-link btn' to="/orders" >Мои заказы</Link>
                     <Link className='header__nav-link btn' to="/profile">Профиль</Link>
                 </nav>
             </div>

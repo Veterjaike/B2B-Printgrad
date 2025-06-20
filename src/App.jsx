@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './pages/Home';
+import Profile from './pages/Profile';
 import './App.css';
 
 function App() {
@@ -20,7 +21,8 @@ function App() {
       <main className={`page-transition ${fade ? 'fade-in' : 'fade-out'}`}>
         <Routes location={location}>
           <Route path="/" element={<Home />} />
-          {/* Добавь другие страницы здесь */}
+          <Route path="profile" element={<Profile />} />
+
         </Routes>
       </main>
     </>

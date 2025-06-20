@@ -1,0 +1,7 @@
+.profile {
+    background-color: #d6d6d6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+}
