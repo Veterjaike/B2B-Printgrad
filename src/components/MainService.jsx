@@ -1,7 +1,10 @@
 import React from "react"
 import './MainService.css'
+import { useNavigate } from 'react-router-dom';
 
 export default function MainService() {
+    const navigate = useNavigate();
+
     return (
         <div className="main-content">
             <div className="container">
@@ -12,8 +15,7 @@ export default function MainService() {
                         <span className="main-content__left-heading-color"> заказчиков</span></h1>
                     <p className="main-content__left-text">Мы широкопрофильная компания<br /> на рынке сервисных ИТ-услуг</p>
                     <div className="main-content__left-wrapper">
-                        <a className="main-content__left-wrapper-link btn"
-                            href="http://95.31.48.48/profile">Присоединиться</a>
+                        <button className="main-content__left-wrapper-link btn" onClick={() => navigate('/profile')}>Присоединиться</button>
                     </div>
                 </div>
                 <div className="main-content__right">
