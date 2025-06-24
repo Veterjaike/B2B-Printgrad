@@ -9,18 +9,15 @@
   min-height: 100vh;
 }
 
-/* Базовый контейнер для переходов */
 .page-transition {
   transition: opacity 0.5s ease;
-  opacity: 1; /* начальное значение */
+  opacity: 1; 
 }
 
-/* Переход к прозрачности */
 .fade-out {
   opacity: 0;
 }
 
-/* Возврат к норме */
 .fade-in {
   opacity: 1;
 }

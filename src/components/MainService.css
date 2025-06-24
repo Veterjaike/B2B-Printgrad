@@ -9,7 +9,7 @@
 
 .main-content .container {
     display: flex;
-    gap: 40px;
+    gap: 30px;
     /* align-items: center; */
     align-content: center;
     flex-wrap: wrap;
