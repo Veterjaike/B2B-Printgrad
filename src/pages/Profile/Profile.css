@@ -1,0 +1,177 @@
+.profile {
+    background-color: #d6d6d6;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.profile-new-layout {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 40px 0;
+  background: #f5f5f7;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.profile-left {
+  width: 380px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.profile-usercard {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 32px 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.profile-avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: #68e1f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+.avatar-placeholder {
+  font-size: 48px;
+  color: #ffffff;
+  font-weight: bold;
+}
+.profile-company {
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+  text-align: center;
+}
+.profile-status {
+  font-size: 15px;
+  color: #4caf50;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.profile-chat-block {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 20px 18px;
+  min-height: 400px;
+}
+.chat-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: #000000;
+  margin-bottom: 8px;
+}
+
+.profile-right {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 800px;
+  min-width: 0;
+}
+.profile-orders-block,
+.profile-market-block {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 18px 20px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #000000;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+}
+.profile-about-block {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 28px 24px;
+  min-height: 460px;
+}
+.about-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 10px;
+}
+.about-text {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.chat-divider {
+  border: none;
+  border-bottom: 1.5px solid #e0e0e0;
+  margin: 12px 0 0 0;
+}
+
+@media (max-width: 1024px) {
+  .profile-new-layout {
+    gap: 20px;
+    padding: 24px 0;
+  }
+  .profile-left {
+    width: 180px;
+  }
+  .profile-right {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile-new-layout {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
+    padding: 16px 0;
+  }
+  .profile-left, .profile-right {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-usercard, .profile-chat-block, .profile-orders-block, .profile-market-block, .profile-about-block {
+    padding: 12px 8px !important;
+    border-radius: 7px !important;
+  }
+  .profile-avatar {
+    width: 64px;
+    height: 64px;
+  }
+  .avatar-placeholder {
+    font-size: 28px;
+  }
+  .profile-company {
+    font-size: 16px;
+  }
+  .profile-status {
+    font-size: 12px;
+  }
+  .about-title {
+    font-size: 15px;
+  }
+  .about-text {
+    font-size: 13px;
+  }
+}

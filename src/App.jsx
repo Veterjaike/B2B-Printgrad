@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
-import Home from './pages/Home';
-import Profile from './pages/Profile';
 import './App.css';
+import { Home, Profile } from './pages';
 
 function App() {
   const location = useLocation();
