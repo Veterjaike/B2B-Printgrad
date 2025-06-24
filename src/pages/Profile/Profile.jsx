@@ -4,7 +4,7 @@ import "./Profile.css"
 
 
 export const Profile = () => {
-    const currentUser = users[1] // теперь отображаем модератора
+    const currentUser = users[1]
 
     return (
         <div className="profile-new-layout">
