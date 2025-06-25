@@ -1,0 +1,45 @@
+.orders {
+    padding: 20px 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.orders-container {
+    display: flex;
+    gap: 30px;
+}
+
+.orders-filter-container {
+    flex: 0 0 280px;
+}
+
+.orders-list-container {
+    flex: 1;
+}
+
+.orders-loading,
+.orders-error {
+    padding: 40px;
+    text-align: center;
+    font-size: 18px;
+    color: #666;
+}
+
+.orders-error {
+    color: #d32f2f;
+}
+
+@media (max-width: 768px) {
+    .orders-container {
+        flex-direction: column;
+    }
+
+    .orders-filter-container {
+        flex: 1;
+        margin-bottom: 20px;
+    }
+}

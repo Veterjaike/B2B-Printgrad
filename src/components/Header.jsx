@@ -12,7 +12,7 @@ export default function Header() {
                 <nav className='header__nav'>
                     <Link className='header__nav-link btn' to="/" >Главная</Link>
                     <Link className='header__nav-link btn' to="/orders" >Все заказы</Link>
-                    <Link className='header__nav-link btn' to="/myOrders" >Мои заказы</Link>
+                    <Link className='header__nav-link btn' to="/myorders" >Мои заказы</Link>
                     <Link className='header__nav-link btn' to="/profile">Профиль</Link>
                 </nav>
             </div>

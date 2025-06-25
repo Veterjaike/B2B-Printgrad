@@ -17,6 +17,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 20px;
+    padding: 10px;
 }
 
 .header__logo-text {
@@ -47,7 +48,7 @@
 }
 
 .btn:active {
-    border: 2px solid #000000;
+    border: 2px solid #3a72ff;
 }
 
 @media (max-width: 480px) {

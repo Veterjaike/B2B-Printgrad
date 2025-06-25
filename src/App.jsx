@@ -3,6 +3,9 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import './App.css';
 import { Home, Profile } from './pages';
+import Footer from './components/Footer';
+import Orders from './pages/Orders/Orders';
+
 
 function App() {
   const location = useLocation();
@@ -20,10 +23,12 @@ function App() {
       <main className={`page-transition ${fade ? 'fade-in' : 'fade-out'}`}>
         <Routes location={location}>
           <Route path="/" element={<Home />} />
+          <Route path="orders" element={<Orders />} />
           <Route path="profile" element={<Profile />} />
 
         </Routes>
       </main>
+      <Footer />
     </>
   );
 }
