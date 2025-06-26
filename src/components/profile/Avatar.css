@@ -1,0 +1,59 @@
+.profile-avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: #68e1f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  position: relative;
+}
+.avatar-placeholder {
+  font-size: 48px;
+  color: #ffffff;
+  font-weight: bold;
+}
+.avatar-img {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin-bottom: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.avatar-upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 8px;
+}
+.avatar-upload-input {
+  display: none;
+}
+.avatar-upload-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: #e0e0e0;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+  z-index: 2;
+}
+.avatar-upload-icon svg circle {
+  fill: #e0e0e0;
+}
+.avatar-upload-icon svg path {
+  stroke: #555;
+} 
