@@ -1,0 +1,23 @@
+.profile-about-block {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 28px 24px;
+  min-height: 505px;
+}
+.about-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 10px;
+}
+.about-divider {
+  border: none;
+  border-bottom: 1.5px solid #e0e0e0;
+  margin: 8px 0 18px 0;
+}
+.about-text {
+  font-size: 16px;
+  color: #444;
+  line-height: 1.6;
+} 
