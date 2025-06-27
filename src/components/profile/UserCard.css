@@ -1,0 +1,22 @@
+.profile-usercard {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 32px 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.profile-company {
+  font-size: 20px;
+  font-weight: 600;
+  color: #222;
+  text-align: center;
+}
+.profile-status {
+  font-size: 15px;
+  color: #4caf50;
+  font-weight: 500;
+  margin-top: 2px;
+} 

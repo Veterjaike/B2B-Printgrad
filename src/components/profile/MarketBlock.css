@@ -1,0 +1,17 @@
+.profile-market-block {
+  background: #fff;
+  border-radius: 7px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 18px 20px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #000000;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+}
+.orders-count {
+  color: #888;
+  font-weight: 500;
+  margin-left: 6px;
+} 
