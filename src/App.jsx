@@ -5,6 +5,7 @@ import './App.css';
 import { Home, Profile } from './pages';
 import Footer from './components/Footer';
 import Orders from './pages/Orders/Orders';
+import RegPage from './pages/RegPage/RegPage';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="orders" element={<Orders />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="registration" element={<RegPage />} />
 
         </Routes>
       </main>

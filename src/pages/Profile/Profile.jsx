@@ -16,7 +16,6 @@ export const Profile = () => {
 
     return (
         <div className="profile-new-layout">
-            {/* Левая колонка */}
             <div className="profile-left">
                 <div className="profile-usercard">
                     <div className="profile-avatar">
@@ -30,8 +29,8 @@ export const Profile = () => {
                             <input type="file" accept="image/*" onChange={handleAvatarChange} className="avatar-upload-input" />
                             <span className="avatar-upload-icon">
                                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <circle cx="11" cy="11" r="11" fill="#fff"/>
-                                    <path d="M11 6v10M6 11h10" stroke="#888" strokeWidth="2" strokeLinecap="round"/>
+                                    <circle cx="11" cy="11" r="11" fill="#fff" />
+                                    <path d="M11 6v10M6 11h10" stroke="#888" strokeWidth="2" strokeLinecap="round" />
                                 </svg>
                             </span>
                         </label>
