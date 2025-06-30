@@ -8,94 +8,66 @@ export const RegisterForm = () => {
     confirmPassword: '',
     fullName: '',
     inn: '',
-    role: 'executor',
-    companyName: ''
+    role: 'executor'
   });
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [innStatus, setInnStatus] = useState('idle'); // 'idle', 'checking', 'valid', 'invalid'
+  const [innStatus, setInnStatus] = useState('idle'); // idle, checking, valid, invalid
 
-  // Ключ Dadata (лучше хранить в .env)
-  const DADATA_API_KEY = 'process.env.NEXT_PUBLIC_DADATA_API_KEY';
-  const DADATA_TIMEOUT = 1000;
-
-  // Проверка ИНН через Dadata
-  const checkInnWithDadata = async (inn) => {
-    if (!inn || inn.length < 10) return;
+  // Проверка ИНН на бэкенде
+  const checkInnBackend = async (inn) => {
+    if (!inn || (inn.length !== 10 && inn.length !== 12)) {
+      setInnStatus('invalid');
+      setErrors(prev => ({ ...prev, inn: 'ИНН должен содержать 10 или 12 цифр' }));
+      return;
+    }
 
     setInnStatus('checking');
+    setErrors(prev => ({ ...prev, inn: '' }));
 
     try {
-      const response = await fetch('https://suggestions.dadata.ru/suggestions/api/4_1/rs/findById/party', {
+      const res = await fetch('/api/check-inn', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          'Authorization': `Token ${process.env.NEXT_PUBLIC_DADATA_API_KEY}`
-        },
-        body: JSON.stringify({ query: inn })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ inn }),
       });
 
-      if (!response.ok) throw new Error('Ошибка проверки ИНН');
-
-      const data = await response.json();
-      const suggestion = data.suggestions?.[0];
-
-      if (suggestion) {
-        const companyName = suggestion.data.name?.full || suggestion.value;
-        setFormData(prev => ({
-          ...prev,
-          companyName
-        }));
+      const data = await res.json();
+      if (res.ok && data.valid) {
         setInnStatus('valid');
       } else {
         setInnStatus('invalid');
-        setErrors(prev => ({ ...prev, inn: 'ИНН не найден в реестре' }));
+        setErrors(prev => ({ ...prev, inn: data.message || 'ИНН не прошел проверку' }));
       }
-    } catch (error) {
-      console.error('Dadata error:', error);
+    } catch {
       setInnStatus('invalid');
       setErrors(prev => ({ ...prev, inn: 'Ошибка проверки ИНН' }));
     }
   };
 
-  // Задержка для запроса (дебаунс)
   useEffect(() => {
-    if (formData.inn.length >= 10) {
+    if (formData.inn.length === 10 || formData.inn.length === 12) {
       const timer = setTimeout(() => {
-        checkInnWithDadata(formData.inn);
-      }, DADATA_TIMEOUT);
-
+        checkInnBackend(formData.inn);
+      }, 700);
       return () => clearTimeout(timer);
     } else {
       setInnStatus('idle');
-      setFormData(prev => ({ ...prev, companyName: '' }));
+      setErrors(prev => ({ ...prev, inn: '' }));
     }
   }, [formData.inn]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const val = name === 'inn' ? value.replace(/\D/g, '') : value;
+    setFormData(prev => ({ ...prev, [name]: val }));
 
-    // Для поля ИНН - только цифры
-    if (name === 'inn') {
-      const numericValue = value.replace(/\D/g, '');
-      setFormData(prev => ({
-        ...prev,
-        [name]: numericValue,
-        companyName: ''
-      }));
-      setInnStatus('idle');
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [name]: value
-      }));
-    }
-
-    // Очищаем ошибку при изменении поля
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+    if (name === 'inn') {
+      setInnStatus('idle');
     }
   };
 
@@ -124,8 +96,6 @@ export const RegisterForm = () => {
 
     if (!formData.inn) {
       newErrors.inn = 'ИНН обязательно';
-    } else if (!/^\d{10,12}$/.test(formData.inn)) {
-      newErrors.inn = 'ИНН должен содержать 10 или 12 цифр';
     } else if (innStatus !== 'valid') {
       newErrors.inn = 'ИНН не прошел проверку';
     }
@@ -136,36 +106,22 @@ export const RegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!validateForm()) return;
 
     setIsLoading(true);
-
     try {
       const response = await fetch('/api/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-          fullName: formData.fullName,
-          inn: formData.inn,
-          role: formData.role,
-          companyName: formData.companyName
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
-
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Ошибка регистрации');
+        const error = await response.json();
+        throw new Error(error.message || 'Ошибка регистрации');
       }
-
       window.location.href = '/dashboard';
     } catch (error) {
-      console.error('Registration error:', error);
-      alert(error.message || 'Произошла ошибка при регистрации');
+      alert(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -176,88 +132,71 @@ export const RegisterForm = () => {
       <h2>Регистрация</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="reg-email">Email*</label>
+          <label>Email*</label>
           <input
             type="email"
-            id="reg-email"
             name="email"
             value={formData.email}
             onChange={handleChange}
-            required
             className={errors.email ? 'error' : ''}
+            required
           />
           {errors.email && <span className="error-message">{errors.email}</span>}
         </div>
 
         <div className="form-group">
-          <label htmlFor="reg-password">Пароль*</label>
+          <label>Пароль*</label>
           <input
             type="password"
-            id="reg-password"
             name="password"
             value={formData.password}
             onChange={handleChange}
-            required
             className={errors.password ? 'error' : ''}
+            required
           />
           {errors.password && <span className="error-message">{errors.password}</span>}
         </div>
 
         <div className="form-group">
-          <label htmlFor="reg-confirm-password">Подтверждение пароля*</label>
+          <label>Подтверждение пароля*</label>
           <input
             type="password"
-            id="reg-confirm-password"
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
-            required
             className={errors.confirmPassword ? 'error' : ''}
+            required
           />
-          {errors.confirmPassword && (
-            <span className="error-message">{errors.confirmPassword}</span>
-          )}
+          {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
         </div>
 
         <div className="form-group">
-          <label htmlFor="reg-fullname">ФИО*</label>
+          <label>ФИО*</label>
           <input
             type="text"
-            id="reg-fullname"
             name="fullName"
             value={formData.fullName}
             onChange={handleChange}
-            required
             className={errors.fullName ? 'error' : ''}
+            required
           />
           {errors.fullName && <span className="error-message">{errors.fullName}</span>}
         </div>
 
         <div className="form-group">
-          <label htmlFor="reg-inn">ИНН ИП или ООО*</label>
+          <label>ИНН*</label>
           <input
             type="text"
-            id="reg-inn"
             name="inn"
             value={formData.inn}
             onChange={handleChange}
-            required
-            className={errors.inn ? 'error' : ''}
             maxLength={12}
-            placeholder="10 или 12 цифр"
+            className={errors.inn ? 'error' : ''}
+            required
           />
-          {innStatus === 'checking' && (
-            <div className="inn-status checking">Проверка ИНН...</div>
-          )}
-          {innStatus === 'valid' && formData.companyName && (
-            <div className="inn-status valid">
-              ✔ {formData.companyName}
-            </div>
-          )}
-          {innStatus === 'invalid' && (
-            <div className="inn-status invalid">✖ ИНН не найден</div>
-          )}
-          {errors.inn && <span className="error-message">{errors.inn}</span>}
+          {innStatus === 'checking' && <div className="inn-status checking">Проверка ИНН...</div>}
+          {innStatus === 'valid' && <div className="inn-status valid">✔ ИНН валиден</div>}
+          {innStatus === 'invalid' && <div className="inn-status invalid">✖ {errors.inn}</div>}
         </div>
 
         <div className="form-group">
@@ -288,8 +227,8 @@ export const RegisterForm = () => {
 
         <button
           type="submit"
+          disabled={isLoading || innStatus !== 'valid'}
           className="submit-btn"
-          disabled={isLoading || innStatus === 'checking'}
         >
           {isLoading ? 'Регистрация...' : 'Зарегистрироваться'}
         </button>
