@@ -17,7 +17,8 @@
 }
 
 .form-group input[type="text"],
-.form-group input[type="password"] {
+.form-group input[type="password"],
+.form-group input[type="email"] {
   width: 100%;
   padding: 8px;
   border: 1px solid #ddd;
@@ -38,6 +39,34 @@
   font-weight: normal;
 }
 
+.error {
+  border-color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+.inn-status {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.inn-status.valid {
+  color: green;
+}
+
+.inn-status.invalid {
+  color: red;
+}
+
+.inn-status.checking {
+  color: #888;
+}
+
 .submit-btn {
   width: 100%;
   padding: 10px;
@@ -51,6 +80,12 @@
 
 .submit-btn:hover {
   background-color: #2a1bff;
+}
+
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 h2 {
