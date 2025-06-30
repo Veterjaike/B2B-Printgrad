@@ -6,7 +6,8 @@ import './RegPage.css';
 const RegPage = () => {
     return (
         <div className="reg-page">
-            <h1>Добро пожаловать!</h1>
+            <h2>Вы не вошли в систему</h2>
+            <p>Зарегистрируйтесь или войдите</p>
             <div className="forms-container">
                 <LoginForm />
                 <RegisterForm />
