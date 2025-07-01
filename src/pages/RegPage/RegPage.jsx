@@ -6,8 +6,8 @@ import './RegPage.css';
 const RegPage = () => {
     return (
         <div className="reg-page">
-            <h2>Вы не вошли в систему</h2>
-            <p>Зарегистрируйтесь или войдите</p>
+            <h2 className='reg-page__heding'>Вы не вошли в систему</h2>
+            <p className='reg-page__text'>Войдите или зарегистрируйтесть</p>
             <div className="forms-container">
                 <LoginForm />
                 <RegisterForm />
