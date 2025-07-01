@@ -2,9 +2,11 @@ import React, { useEffect, useRef, useState } from "react"
 import "./HomeBanner.css"
 
 const animatedPhrases = [
-  "перейти на новый уровень сервиса",
-  "преумножить уровень доходов",
-  "достичь успеха в развитии бизнеса"
+  "найти идеальное сотрудничество",
+  "создавать успешные проекты",
+  "найти проверенных специалистов",
+  "развивать профессиональные навыки",
+  "экономить время и ресурсы"
 ]
 
 const TypingEffect = () => {
@@ -56,11 +58,11 @@ const HomeBanner = () => (
     <div className="home-banner-content">
       <div>
         <h1 className="home-banner-title">
-          Ведущая компания на<br />рынке сервисных ИТ - <br />услуг
+          Платформа для эффективного<br />взаимодействия компаний<br />и IT-специалистов
         </h1>
         <div className="home-banner-subtitle">
-          Комплексное обслуживание ИТ-инфраструктуры. Помогаем своим <br />
-          <span className="home-banner-clients">клиентам <div className="home-banner-typing-row"><TypingEffect /></div></span>
+          Создаем среду для взаимовыгодного сотрудничества<br />где каждая сторона получает максимум возможностей<br />
+          <span className="home-banner-clients">Помогаем своим пользователям<div className="home-banner-typing-row"><TypingEffect /></div></span>
         </div>
       </div>
     </div>
