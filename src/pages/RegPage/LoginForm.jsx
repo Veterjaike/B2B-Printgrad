@@ -1,56 +1,63 @@
-import React, { useState } from 'react';
-import './Forms.css'; // Общие стили для форм
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-export const LoginForm = () => {
-  const [formData, setFormData] = useState({
-    login: '',
-    password: '',
-  });
+export default function LoginForm () {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+    const handleLogin = async (e) => {
+        e.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Обработка входа
-    console.log('Login data:', formData);
-  };
+        try {
+            const response = await fetch('http://192.168.36.12:3000/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
 
-  return (
-    <div className="form-container">
-      <h2>Вход</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="login">Логин</label>
-          <input
-            type="text"
-            id="login"
-            name="login"
-            value={formData.login}
-            onChange={handleChange}
-            required
-          />
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem('token', data.token);
+                toast.success('Успешный вход!');
+                setTimeout(() => navigate('/profile'), 1500);
+            } else {
+                toast.error(data.error || 'Ошибка входа');
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error('Сервер недоступен');
+        }
+    };
+
+    return (
+        <div className="form-container">
+            <h2>Вход</h2>
+            <form onSubmit={handleLogin}>
+                <div className="form-group">
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Пароль:</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <button type="submit" className="submit-btn">Войти</button>
+            </form>
+            <ToastContainer position="top-right" autoClose={2000} />
         </div>
-        
-        <div className="form-group">
-          <label htmlFor="password">Пароль</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        
-        <button type="submit" className="submit-btn">Войти</button>
-      </form>
-    </div>
-  );
-};
+    );
+}

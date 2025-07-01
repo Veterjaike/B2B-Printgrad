@@ -3,10 +3,12 @@
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   text-align: left;
 }
 
@@ -24,6 +26,15 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="password"]:focus,
+.form-group input[type="email"]:focus {
+  border-color: #2a1bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(42, 27, 255, 0.5);
 }
 
 .radio-group {
@@ -40,7 +51,8 @@
 }
 
 .error {
-  border-color: red;
+  border-color: red !important;
+  box-shadow: 0 0 5px red !important;
 }
 
 .error-message {
@@ -76,9 +88,10 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
   background-color: #2a1bff;
 }
 
@@ -86,9 +99,11 @@
   background-color: #ccc;
   cursor: not-allowed;
   opacity: 0.6;
+  pointer-events: none;
 }
 
 h2 {
   margin-top: 0;
   color: #333;
+  text-align: center;
 }
