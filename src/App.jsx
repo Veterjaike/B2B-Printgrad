@@ -27,9 +27,10 @@ function App() {
 
           {/* Защита маршрутов без токена */}
           <Route element={<ProtectedRoute />}>
-            <Route path="orders" element={<Orders />} />
+            
 
           </Route>
+          <Route path="orders" element={<Orders />} />
           <Route path="profile" element={<Profile />} />
           <Route path="registration" element={<RegPage />} />
         </Routes>
