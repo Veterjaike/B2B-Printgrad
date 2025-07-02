@@ -1,0 +1,55 @@
+.horizons {
+    background-color: #84d0ff;
+    margin: 0;
+    padding: 40px;
+}
+
+.horizons__wrapper {
+    background-color: #0000000b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 30px;
+    animation: breathing-two 3s ease-in-out infinite;
+}
+
+@keyframes breathing-two {
+
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale(1.02);
+        opacity: 1;
+    }
+}
+
+.horizons__heading-up {
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-size: 34px;
+    color: #000000;
+}
+
+.horizons__text {
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-size: 16px;
+}
+
+.horizons__heding-down {
+    text-align: center;
+    margin: 0 0 20px 0;
+    font-size: 24px;
+}
+
+.horizons-btn {
+    width: 200px;
+}

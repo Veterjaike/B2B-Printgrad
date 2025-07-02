@@ -1,0 +1,167 @@
+.steps {
+    /* margin: 0 auto; */
+    padding: 120px 120px 30px;
+    background-color: #84d0ff;
+    overflow: hidden;
+    border-bottom: 5px solid #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+}
+
+.steps .container {
+    display: flex;
+    justify-content: space-between;
+    gap: 50px;
+    align-items: center;
+    margin: 0 0 130px 0;
+}
+
+.steps__wrapper {
+    position: relative;
+    text-align: center;
+    width: 160px;
+}
+
+.steps__wrapper-circle {
+    width: 120px;
+    height: 120px;
+    background-color: #D9D9D9;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+}
+
+.steps__wrapper-text {
+    font-size: 20px;
+    width: 120px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.arrowUp {
+    background-color: #0083FF;
+}
+
+.steps__wrapper-arrow {
+    width: 220px;
+    position: absolute;
+    left: 95%;
+    opacity: 0;
+    transform: translateX(-50%) scale(0.5);
+    transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+.steps__wrapper-arrow.ArrowDown {
+    bottom: -70px;
+}
+
+.steps__wrapper-arrow.ArrowUp {
+    top: -70px;
+}
+
+.steps__wrapper-arrow.visible {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+}
+
+.steps__wrapper-circle {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    background-color: #D9D9D9;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.steps__number {
+    font-size: 48px;
+    font-weight: bold;
+    color: #000;
+    position: absolute;
+}
+
+@media (max-width: 1200px) {
+    .steps {
+        padding: 80px 40px;
+    }
+
+    .steps .container {
+        gap: 30px;
+    }
+
+    .steps__wrapper {
+        width: 140px;
+    }
+
+    .steps__wrapper-arrow {
+        width: 180px;
+        left: 90%;
+        filter:
+            brightness(0)
+            /* Делаем стрелку черной */
+            sepia(1)
+            /* Добавляем коричневый оттенок */
+            hue-rotate(195deg)
+            /* Поворачиваем цвет в синий */
+            saturate(10)
+            /* Усиливаем насыщенность */
+            brightness(0.9);
+
+    }
+}
+
+@media (max-width: 992px) {
+    .steps .container {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 60px 30px;
+    }
+
+    .steps__wrapper {
+        width: 160px;
+    }
+
+    .steps__wrapper-arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .steps {
+        padding: 60px 20px;
+    }
+
+    .steps .container {
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    .steps__wrapper {
+        width: 100%;
+        max-width: 220px;
+    }
+
+    .steps__wrapper-text {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .steps {
+        padding: 40px 15px;
+    }
+
+    .steps__wrapper-circle {
+        width: 100px;
+        height: 100px;
+    }
+
+    .steps__wrapper-text {
+        font-size: 18px;
+    }
+}
