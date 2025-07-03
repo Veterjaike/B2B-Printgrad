@@ -1,12 +1,22 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
-export default function ProtectedRoute({ children }) {
+export default function ProtectedRoute() {
   const token = localStorage.getItem('token');
 
   if (!token) {
     return <Navigate to="/registration" replace />;
   }
 
-  return children;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (Date.now() >= payload.exp * 1000) {
+      localStorage.removeItem('token');
+      return <Navigate to="/registration" replace />;
+    }
+  } catch (err) {
+    localStorage.removeItem('token');
+    return <Navigate to="/registration" replace />;
+  }
+
+  return <Outlet />;
 }

@@ -7,6 +7,7 @@ import { Home, Profile } from './pages';
 import Footer from './components/Footer';
 import Orders from './pages/Orders/Orders';
 import RegPage from './pages/RegPage/RegPage';
+import MyOrders from './pages/MyOrders/MyOrders';
 
 function App() {
   const location = useLocation();
@@ -25,13 +26,13 @@ function App() {
         <Routes location={location}>
           <Route path="/" element={<Home />} />
 
-          {/* Защита маршрутов без токена */}
+          {/* Защищённые маршруты */}
           <Route element={<ProtectedRoute />}>
-            
-
+            <Route path="orders" element={<Orders />} />
+            <Route path="profile" element={<Profile />} />
+            <Route path="myorders" element={<MyOrders />} />
           </Route>
-          <Route path="orders" element={<Orders />} />
-          <Route path="profile" element={<Profile />} />
+
           <Route path="registration" element={<RegPage />} />
         </Routes>
       </main>

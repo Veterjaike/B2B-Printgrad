@@ -1,45 +1,29 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import React from 'react';
+import './UserCard.css';
+import { useNavigate } from 'react-router-dom';
 
-export default function Profile() {
-    const [user, setUser] = useState(null);
-    const navigate = useNavigate();
+export default function UserCard({ user }) {
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            navigate("/registration");
-            return;
-        }
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/registration');
+  };
 
-        fetch("https://b2b.printgrad.ru/api/profile", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error("Ошибка получения данных");
-                }
-                return res.json();
-            })
-            .then(data => setUser(data))
-            .catch(err => {
-                console.error(err);
-                toast.error("Не удалось загрузить профиль");
-                navigate("/registration");
-            });
-    }, [navigate]);
+  if (!user) return <p>Нет данных пользователя</p>;
 
-    return (
-        <div>
-            <h2>Профиль</h2>
-            {user ? (
-                <UserCard user={user} />
-            ) : (
-                <p>Загрузка...</p>
-            )}
-        </div>
-    );
+  return (
+    <div className="user-card">
+      <h3>Профиль пользователя</h3>
+      <p><strong>ID:</strong> {user.id}</p>
+      <p><strong>Имя:</strong> {user.full_name || 'Не указано'}</p>
+      <p><strong>Email:</strong> {user.email}</p>
+      <p><strong>ИНН:</strong> {user.inn || 'Не указан'}</p>
+      <p><strong>Роль:</strong> {user.role || 'Не указана'}</p>
+      
+      <button className="logout-btn" onClick={handleLogout}>
+        Выйти
+      </button>
+    </div>
+  );
 }

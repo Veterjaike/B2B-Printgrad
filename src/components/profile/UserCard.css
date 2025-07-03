@@ -1,22 +1,33 @@
-.profile-usercard {
-  background: #fff;
-  border-radius: 7px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
-  padding: 32px 24px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
+.user-card {
+  background: #f7f7f7;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  margin: 0 auto;
 }
-.profile-company {
-  font-size: 20px;
-  font-weight: 600;
-  color: #222;
-  text-align: center;
+
+.user-card h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
 }
-.profile-status {
-  font-size: 15px;
-  color: #4caf50;
-  font-weight: 500;
-  margin-top: 2px;
-} 
+
+.user-card p {
+  margin: 6px 0;
+  font-size: 16px;
+}
+
+.logout-btn {
+  margin-top: 15px;
+  padding: 8px 16px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background-color: #d9363e;
+}
