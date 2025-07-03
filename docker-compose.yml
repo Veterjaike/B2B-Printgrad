@@ -2,15 +2,14 @@ version: '3.8'
 
 services:
   frontend:
-    build: .  # Сборка из локального Dockerfile
-    ports:
-      - "80:80"
-    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
     environment:
       - NODE_ENV=production
-    networks:
-      - frontend-net
-
-networks:
-  frontend-net:
-    driver: bridge
+    ports:
+      - "80:80"
+    deploy:
+      resources:
+        limits:
+          memory: 2G  # Vite требует памяти для сборки
