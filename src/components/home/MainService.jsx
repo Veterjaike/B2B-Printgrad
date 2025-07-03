@@ -17,7 +17,7 @@ export default function MainService() {
                         Присоединяйтесь к&nbsp;нам и&nbsp;начните свой путь к&nbsp;<br />успеху уже сегодня!</p>
                 </div>
                 <div className="main-content__right">
-                    <img className="main-content__right-img" src="/images/main-img2.webp" alt="Город и руки" width={800} height={600} loading="lazy" />
+                    <img className="main-content__right-img" src="/images/main-img.png" alt="Город и руки" width={800} height={600} loading="lazy" />
                 </div>
             </div>
 
