@@ -27,7 +27,7 @@ export const RegisterForm = () => {
     setErrors(prev => ({ ...prev, inn: '' }));
 
     try {
-      const res = await fetch('http://192.168.36.12:3000/api/check-inn', {
+      const res = await fetch('https://b2b.printgrad.ru:3000/api/check-inn', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inn }),
@@ -120,7 +120,7 @@ export const RegisterForm = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch('http://192.168.36.12:3000/api/register', {
+      const res = await fetch('https://b2b.printgrad.ru:3000/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
