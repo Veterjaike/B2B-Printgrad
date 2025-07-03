@@ -9,7 +9,7 @@ const Horizons = () => {
             <div className="container">
                 <div className="horizons__wrapper">
                     <h2 className="horizons__heading-up">Откройте новые горизонты
-                        с&nbsp;платформой&nbsp;Za бизнес</h2>
+                        с&nbsp;платформой&nbsp;<br />Za бизнес</h2>
                     <p className="horizons__text">Za&nbsp;бизнес&nbsp;&mdash; это инновационная платформа, соединяющая компании и&nbsp;специалистов по&nbsp;всей России. Мы&nbsp;помогаем вам находить решения для роста и&nbsp;развития вашего бизнеса.
                         Не&nbsp;упустите свой шанс!Станьте частью ведущего сообщества экспертов и&nbsp;руководителей.
                         Вносите свой вклад в&nbsp;трансформацию бизнеса.
