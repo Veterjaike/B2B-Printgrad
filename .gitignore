@@ -1,4 +1,6 @@
-.DS_Store
-.DS_Store
-/node_modules
-.env.local
+node_modules
+dist
+.git
+Dockerfile
+docker-compose.yml
+*.md
