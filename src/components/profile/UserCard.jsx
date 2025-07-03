@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import UserCard from "../../components/UserCard";
 import { toast } from "react-toastify";
 
 export default function Profile() {

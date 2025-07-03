@@ -27,7 +27,7 @@ export const RegisterForm = () => {
     setErrors(prev => ({ ...prev, inn: '' }));
 
     try {
-      const res = await fetch('https://192.168.36.12:3000/api/check-inn', {
+      const res = await fetch('https://b2b.printgrad.ru/api/check-inn', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ inn }),
