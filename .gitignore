@@ -1,6 +1,6 @@
 node_modules
 dist
 .git
-Dockerfile
-docker-compose.yml
 *.md
+dist
+node_modules
