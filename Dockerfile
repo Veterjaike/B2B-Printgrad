@@ -1,35 +1,27 @@
-# Stage 1: Build (Builder)
+# Stage 1: Build
 FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# 1. Копируем только lock-файлы для кэширования
+# 1. Копируем только package.json для кэширования
 COPY package.json package-lock.json ./
 
-# 2. Чистая установка зависимостей (без devDependencies)
-RUN npm ci --omit=dev
+# 2. Устанавливаем зависимости
+RUN npm install --production
 
 # 3. Копируем остальные файлы
 COPY . .
 
-# 4. Сборка с production-флагом
+# 4. Запускаем сборку
 RUN npm run build
 
-# Stage 2: Production (NGINX)
-FROM nginx:stable-alpine
+# Stage 2: Production
+FROM nginx:alpine
 
-# 5. Копируем только необходимые файлы
+# 5. Копируем собранное приложение
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# 6. Оптимизированная конфигурация nginx для SPA
+# 6. Копируем конфиг nginx
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# 7. Безопасность: запуск от непривилегированного пользователя
-RUN chown -R nginx:nginx /usr/share/nginx/html && \
-    chmod -R 755 /usr/share/nginx/html
-
 EXPOSE 80
-
-USER nginx
-
-CMD ["nginx", "-g", "daemon off;"]
