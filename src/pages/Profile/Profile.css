@@ -1,9 +1,9 @@
 .profile {
-    background-color: #d6d6d6;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: flex-end;
+  background-color: #d6d6d6;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .profile-new-layout {
@@ -38,9 +38,11 @@
     gap: 20px;
     padding: 24px 0;
   }
+
   .profile-left {
     width: 180px;
   }
+
   .profile-right {
     width: 100%;
     min-width: 0;
@@ -54,33 +56,46 @@
     gap: 24px;
     padding: 16px 0;
   }
-  .profile-left, .profile-right {
+
+  .profile-left,
+  .profile-right {
     width: 100%;
     min-width: 0;
   }
 }
 
 @media (max-width: 480px) {
-  .profile-usercard, .profile-chat-block, .profile-orders-block, .profile-market-block, .profile-about-block {
+
+  .profile-usercard,
+  .profile-chat-block,
+  .profile-orders-block,
+  .profile-market-block,
+  .profile-about-block {
     padding: 12px 8px !important;
     border-radius: 7px !important;
   }
+
   .profile-avatar {
     width: 64px;
     height: 64px;
   }
+
   .avatar-placeholder {
     font-size: 28px;
   }
+
   .profile-company {
     font-size: 16px;
   }
+
   .profile-status {
     font-size: 12px;
   }
+
   .about-title {
     font-size: 15px;
   }
+
   .about-text {
     font-size: 13px;
   }
