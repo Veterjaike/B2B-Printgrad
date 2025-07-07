@@ -44,8 +44,8 @@ export default function Header() {
 
         <div className="header__right">
           {user?.role === 'заказчик' && (
-            <Link className='header__nav-link btn' to="/create-order">
-              Создать заявку
+            <Link className='header__nav-create-link btn' to="/create-order">
+              Создать заказ
             </Link>
           )}
           <Link className='header__nav-link btn' to="/profile">Профиль</Link>
