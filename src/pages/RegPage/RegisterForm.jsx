@@ -8,10 +8,11 @@ export const RegisterForm = () => {
     confirmPassword: '',
     fullName: '',
     inn: '',
-    role: 'executor',
+    role: 'исполнитель',
   });
 
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [innStatus, setInnStatus] = useState('idle'); // idle, checking, valid, invalid
 
@@ -48,7 +49,6 @@ export const RegisterForm = () => {
     }
   };
 
-  // Запускаем проверку ИНН с задержкой
   useEffect(() => {
     if (formData.inn.length === 10 || formData.inn.length === 12) {
       const timer = setTimeout(() => {
@@ -62,7 +62,6 @@ export const RegisterForm = () => {
     }
   }, [formData.inn]);
 
-  // Обработка изменений полей
   const handleChange = (e) => {
     const { name, value } = e.target;
     const val = name === 'inn' ? value.replace(/\D/g, '') : value;
@@ -75,9 +74,12 @@ export const RegisterForm = () => {
     if (name === 'inn') {
       setInnStatus('idle');
     }
+
+    if (serverError) {
+      setServerError('');
+    }
   };
 
-  // Валидация формы перед отправкой
   const validateForm = () => {
     const newErrors = {};
 
@@ -99,6 +101,11 @@ export const RegisterForm = () => {
 
     if (!formData.fullName) {
       newErrors.fullName = 'ФИО обязательно';
+    } else {
+      const words = formData.fullName.trim().split(/\s+/);
+      if (words.length !== 3) {
+        newErrors.fullName = 'ФИО должно содержать ровно 3 слова';
+      }
     }
 
     if (!formData.inn) {
@@ -107,20 +114,24 @@ export const RegisterForm = () => {
       newErrors.inn = 'ИНН не прошел проверку';
     }
 
+    if (!formData.role) {
+      newErrors.role = 'Роль обязательна';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // Отправка формы
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) return;
 
     setIsLoading(true);
+    setServerError('');
 
     try {
-      const res = await fetch('https://b2b.printgrad.ru:3000/api/register', {
+      const res = await fetch('https://b2b.printgrad.ru/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -128,12 +139,14 @@ export const RegisterForm = () => {
 
       if (!res.ok) {
         const error = await res.json();
-        throw new Error(error.message || 'Ошибка регистрации');
+        setServerError(error.message || 'Ошибка регистрации');
+        setIsLoading(false);
+        return;
       }
 
       window.location.href = '/dashboard';
     } catch (error) {
-      alert(error.message);
+      setServerError('Ошибка сети. Попробуйте позже.');
     } finally {
       setIsLoading(false);
     }
@@ -228,8 +241,8 @@ export const RegisterForm = () => {
               <input
                 type="radio"
                 name="role"
-                value="executor"
-                checked={formData.role === 'executor'}
+                value="исполнитель"
+                checked={formData.role === 'исполнитель'}
                 onChange={handleChange}
               />
               Исполнитель
@@ -238,14 +251,17 @@ export const RegisterForm = () => {
               <input
                 type="radio"
                 name="role"
-                value="customer"
-                checked={formData.role === 'customer'}
+                value="заказчик"
+                checked={formData.role === 'заказчик'}
                 onChange={handleChange}
               />
               Заказчик
             </label>
           </div>
+          {errors.role && <span className="error-message">{errors.role}</span>}
         </div>
+
+        {serverError && <div className="server-error">{serverError}</div>}
 
         <button
           type="submit"
