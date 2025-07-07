@@ -41,7 +41,7 @@ const ZaBiznes = () => {
                         </p>
                     </div>
                     <div className="zabiznes__right-wrapper">
-                        <img className="zabiznes__right-icon" src="/images/main-icon4.png" alt="icon"  width={40} height={40} />
+                        <img className="zabiznes__right-icon" src="/images/main-icon4.png" alt="icon" width={40} height={40} />
                         <h3 className="zabiznes__right-wrapper-heading">
                             Видимость и признание
                         </h3>

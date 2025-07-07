@@ -1,29 +1,23 @@
 import React from 'react';
 import './OrdersList.css';
 
-const OrdersList = ({ orders, activeCategories }) => {
-  const filteredOrders = activeCategories.length > 0
-    ? orders.filter(order => activeCategories.includes(order.category))
-    : orders;
-
+const OrdersList = ({ orders }) => {
   return (
     <div className="orders-list">
       <div className="orders-list-header">
         <h2 className="orders-list-title">Список заказов</h2>
         <div className="orders-list-count">
-          {filteredOrders.length} из {orders.length}
+          {orders.length} {orders.length === 1 ? 'заказ' : 'заказов'}
         </div>
       </div>
 
-      {filteredOrders.length === 0 ? (
+      {orders.length === 0 ? (
         <div className="orders-list-empty">
-          {activeCategories.length > 0 
-            ? 'Нет заказов по выбранным фильтрам' 
-            : 'Нет доступных заказов'}
+          Нет доступных заказов
         </div>
       ) : (
         <div className="orders-list-container">
-          {filteredOrders.map(order => (
+          {orders.map(order => (
             <OrderCard key={order.id} order={order} />
           ))}
         </div>
@@ -32,32 +26,45 @@ const OrdersList = ({ orders, activeCategories }) => {
   );
 };
 
-const OrderCard = ({ order }) => (
-  <div className="order-card">
-    <div className="order-card-header">
-      <h3 className="order-card-title">{order.title}</h3>
-      <span className="order-card-id">№{order.id}</span>
+const OrderCard = ({ order }) => {
+  const formatStatusClass = (status) => {
+    if (!status) return 'status-не-указан';
+    return 'status-' + status.toLowerCase().replace(/\s/g, '-').replace(/[()]/g, '');
+  };
+
+  return (
+    <div className="order-card">
+      <div className="order-card-header">
+        <h3 className="order-card-title">{order.title || 'Без названия'}</h3>
+        <span className="order-card-id">№{order.id}</span>
+      </div>
+
+      <div className="order-card-details">
+        <div><strong>Регион:</strong> {order.region || 'Не указан'}</div>
+        <div><strong>Город:</strong> {order.city || 'Не указан'}</div>
+        <div>
+          <strong>Дата создания:</strong>{' '}
+          {order.created_at ? new Date(order.created_at).toLocaleDateString() : 'Не указана'}
+        </div>
+        <div>
+          <strong>Дедлайн:</strong>{' '}
+          {order.deadline ? new Date(order.deadline).toLocaleDateString() : 'Не указан'}
+        </div>
+        <div>
+          <strong>Бюджет:</strong>{' '}
+          {order.budget !== undefined && order.budget !== null
+            ? order.budget.toLocaleString() + ' ₽'
+            : 'Не указан'}
+        </div>
+        <div>
+          <strong>Статус:</strong>{' '}
+          <span className={formatStatusClass(order.status)}>
+            {order.status || 'Не указан'}
+          </span>
+        </div>
+      </div>
     </div>
-    
-    <div className="order-card-category">{order.category}</div>
-    
-    <div className="order-card-details">
-      <div className="order-card-date">
-        <span>Дата:</span>
-        {new Date(order.date).toLocaleDateString()}
-      </div>
-      <div className="order-card-status">
-        <span>Статус:</span>
-        <span className={`status-${order.status.toLowerCase()}`}>
-          {order.status}
-        </span>
-      </div>
-      <div className="order-card-price">
-        <span>Сумма:</span>
-        {order.price.toLocaleString()} ₽
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 
 export default OrdersList;
