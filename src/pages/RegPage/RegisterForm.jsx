@@ -129,6 +129,7 @@ export const RegisterForm = () => {
 
     setIsLoading(true);
     setServerError('');
+    setErrors(prev => ({ ...prev }));
 
     try {
       const res = await fetch('https://b2b.printgrad.ru/api/register', {
@@ -138,8 +139,27 @@ export const RegisterForm = () => {
       });
 
       if (!res.ok) {
-        const error = await res.json();
-        setServerError(error.message || 'Ошибка регистрации');
+        const errorData = await res.json();
+
+        if (errorData.errors) {
+          setErrors(errorData.errors);
+        } else if (errorData.error) {
+          const errMsg = errorData.error.toLowerCase();
+
+          if (errMsg.includes('email')) {
+            setErrors(prev => ({ ...prev, email: errorData.error }));
+          } else if (errMsg.includes('inn')) {
+            setErrors(prev => ({ ...prev, inn: errorData.error }));
+            setInnStatus('invalid');
+          } else {
+            setServerError(errorData.error);
+          }
+        } else if (errorData.message) {
+          setServerError(errorData.message);
+        } else {
+          setServerError('Ошибка регистрации');
+        }
+
         setIsLoading(false);
         return;
       }
