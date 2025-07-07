@@ -1,45 +1,116 @@
-.orders {
-    padding: 20px 0;
-}
+/* Orders.css */
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
+.orders {
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f9f9f9;
+  min-height: 80vh;
 }
 
 .orders-container {
-    display: flex;
-    gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
+/* Фильтр */
 .orders-filter-container {
-    flex: 0 0 280px;
+  flex: 1 1 280px;
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  min-width: 280px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
+.orders-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.filter-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  color: #333;
+}
+
+/* Категории */
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 5px;
+}
+
+.category-item {
+  user-select: none;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.category-item input[type="checkbox"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+/* Селект для города */
+.city-filter select {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  color: #222;
+  transition: border-color 0.3s ease;
+}
+
+.city-filter select:focus {
+  outline: none;
+  border-color: #007BFF;
+  box-shadow: 0 0 5px #007BFF;
+}
+
+/* Список заказов */
 .orders-list-container {
-    flex: 1;
+  flex: 3 1 700px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.08);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
+/* Загрузка и ошибки */
 .orders-loading,
 .orders-error {
-    padding: 40px;
-    text-align: center;
-    font-size: 18px;
-    color: #666;
+  font-size: 1.1rem;
+  color: #666;
+  padding: 20px;
+  text-align: center;
 }
 
-.orders-error {
-    color: #d32f2f;
-}
-
-@media (max-width: 768px) {
-    .orders-container {
-        flex-direction: column;
-    }
-
-    .orders-filter-container {
-        flex: 1;
-        margin-bottom: 20px;
-    }
+/* Адаптив */
+@media (max-width: 900px) {
+  .orders-container {
+    flex-direction: column;
+  }
+  
+  .orders-filter-container,
+  .orders-list-container {
+    max-height: none;
+    width: 100%;
+  }
+  
+  .categories-list {
+    max-height: 200px;
+  }
 }
