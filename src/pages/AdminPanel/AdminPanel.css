@@ -6,6 +6,8 @@
 
   display: flex;
   gap: 20px;
+  /* Чтобы не вылазило при маленькой ширине */
+  flex-wrap: wrap;
 }
 
 .admin-panel > aside {
@@ -16,11 +18,13 @@
   padding: 10px;
   background: #fafafa;
   border-radius: 6px;
+  box-sizing: border-box;
 }
 
 .admin-panel > div {
   flex: 1;
   min-width: 0;
+  box-sizing: border-box;
 }
 
 /* Стили для поиска */
@@ -127,6 +131,7 @@
   padding: 20px;
   width: 350px;
   border-radius: 8px;
+  box-sizing: border-box;
 }
 
 .modal h3 {
@@ -157,4 +162,24 @@
   padding: 6px 14px;
   margin-left: 10px;
   cursor: pointer;
+}
+
+/* Адаптивность */
+
+@media (max-width: 768px) {
+  .admin-panel {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .admin-panel > aside,
+  .admin-panel > div {
+    flex-basis: 100%;
+    max-height: none;
+    overflow-y: visible;
+  }
+
+  .admin-panel > aside {
+    margin-bottom: 20px;
+  }
 }
