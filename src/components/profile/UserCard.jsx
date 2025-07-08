@@ -10,7 +10,13 @@ export default function UserCard({ user }) {
     navigate('/registration');
   };
 
+  const handleAdminPanel = () => {
+    navigate('/admin');
+  };
+
   if (!user) return <p>Нет данных пользователя</p>;
+
+  const isAdminOrModerator = user.role === 'admin' || user.role === 'moderator';
 
   return (
     <div className="user-card">
@@ -21,9 +27,17 @@ export default function UserCard({ user }) {
       <p><strong>ИНН:</strong> {user.inn || 'Не указан'}</p>
       <p><strong>Роль:</strong> {user.role || 'Не указана'}</p>
       
-      <button className="logout-btn" onClick={handleLogout}>
-        Выйти
-      </button>
+      <div className="buttons-row">
+        <button className="logout-btn" onClick={handleLogout}>
+          Выйти
+        </button>
+
+        {isAdminOrModerator && (
+          <button className="admin-panel-btn" onClick={handleAdminPanel}>
+            Админ панель
+          </button>
+        )}
+      </div>
     </div>
   );
 }

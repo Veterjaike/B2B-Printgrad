@@ -31,3 +31,33 @@
 .logout-btn:hover {
   background-color: #d9363e;
 }
+
+.buttons-row {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.logout-btn,
+.admin-panel-btn {
+  padding: 8px 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  background-color: #d9534f; /* красный для выхода */
+  transition: background-color 0.3s;
+}
+
+.admin-panel-btn {
+  background-color: #0275d8; /* синий для админ панели */
+}
+
+.logout-btn:hover {
+  background-color: #c9302c;
+}
+
+.admin-panel-btn:hover {
+  background-color: #025aa5;
+}
