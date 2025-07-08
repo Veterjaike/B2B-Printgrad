@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import ProtectedRoute from './pages/RegPage/ProtectedRoute';
-import AdminRoute from './components/AdminRoute'; // 👈 добавлено
+import AdminRoute from './components/AdminRoute';
 import Header from './components/Header';
 import './App.css';
 import { Home, Profile } from './pages';

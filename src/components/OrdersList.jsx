@@ -1,5 +1,6 @@
 import React from 'react';
 import './OrdersList.css';
+import { useNavigate } from 'react-router-dom';
 
 const OrdersList = ({ orders }) => {
   return (
@@ -12,9 +13,7 @@ const OrdersList = ({ orders }) => {
       </div>
 
       {orders.length === 0 ? (
-        <div className="orders-list-empty">
-          Нет доступных заказов
-        </div>
+        <div className="orders-list-empty">Нет доступных заказов</div>
       ) : (
         <div className="orders-list-container">
           {orders.map(order => (
@@ -27,13 +26,19 @@ const OrdersList = ({ orders }) => {
 };
 
 const OrderCard = ({ order }) => {
+  const navigate = useNavigate();
+
   const formatStatusClass = (status) => {
     if (!status) return 'status-не-указан';
     return 'status-' + status.toLowerCase().replace(/\s/g, '-').replace(/[()]/g, '');
   };
 
+  const handleClick = () => {
+    navigate(`/orders/${order.id}`);
+  };
+
   return (
-    <div className="order-card">
+    <div className="order-card clickable" onClick={handleClick}>
       <div className="order-card-header">
         <h3 className="order-card-title">{order.title || 'Без названия'}</h3>
         <span className="order-card-id">№{order.id}</span>

@@ -43,10 +43,16 @@
   border-radius: 8px;
   padding: 16px;
   background-color: #f9f9f9;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, background-color 0.2s;
+  cursor: default;
 }
 
-.order-card:hover {
+.order-card.clickable {
+  cursor: pointer;
+}
+
+.order-card.clickable:hover {
+  background-color: #f2f2f2;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -82,7 +88,6 @@
   color: #222;
 }
 
-/* Стили для статусов */
 .status-открытый {
   color: #2196f3;
   font-weight: 600;
