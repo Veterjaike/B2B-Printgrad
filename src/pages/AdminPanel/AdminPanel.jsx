@@ -45,7 +45,7 @@ const AdminPanel = () => {
   const fetchAllUsers = async () => {
     setLoadingAllUsers(true);
     try {
-      const res = await axiosInstance.get('/api/admin/users'); // эндпоинт для всех пользователей
+      const res = await axiosInstance.get('/api/admin/users'); // <-- эндпоинт для всех пользователей
       setAllUsers(res.data.users || []);
     } catch (err) {
       console.error(err);
@@ -152,14 +152,10 @@ const AdminPanel = () => {
     setEditingUser(null);
   };
 
-  // Фильтрация пользователей по ID и ФИО
-  const filteredUsers = allUsers.filter(user => {
-    const search = searchUserId.trim().toLowerCase();
-    return (
-      user.id.toString().includes(search) ||
-      (user.full_name && user.full_name.toLowerCase().includes(search))
-    );
-  });
+  // Фильтрация пользователей по ID
+  const filteredUsers = allUsers.filter(user =>
+    user.id.toString().includes(searchUserId.trim())
+  );
 
   // Одобрить заявку
   const approveOrder = async (id) => {
@@ -173,13 +169,13 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="admin-panel" style={{ display: 'flex', gap: '20px' }}>
+    <div className="admin-panel">
       {/* Левая боковая панель с пользователями и поиском */}
-      <aside style={{ flexBasis: '350px', maxHeight: '90vh', overflowY: 'auto' }}>
+      <aside>
         <h2 className="admin-subtitle">Все пользователи</h2>
         <input
           type="text"
-          placeholder="Поиск по ID или ФИО"
+          placeholder="Поиск по ID"
           value={searchUserId}
           onChange={(e) => setSearchUserId(e.target.value)}
           className="search-input"
@@ -215,8 +211,8 @@ const AdminPanel = () => {
         )}
       </aside>
 
-      {/* Основной контент */}
-      <div style={{ flexGrow: 1, overflowY: 'auto', maxHeight: '90vh' }}>
+      {/* Основной контент (оставь без изменений) */}
+      <div>
         {/* Пользователи на одобрении */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Пользователи, ожидающие одобрения</h2>
