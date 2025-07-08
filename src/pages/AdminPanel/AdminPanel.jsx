@@ -46,7 +46,7 @@ const AdminPanel = () => {
     setLoadingAllUsers(true);
     try {
       const res = await axiosInstance.get('/api/admin/users'); // эндпоинт для всех пользователей
-      setAllUsers(res.data.users || []);
+      setAllUsers(res.data || []);  // <-- исправлено здесь
     } catch (err) {
       console.error(err);
       setAllUsers([]);
