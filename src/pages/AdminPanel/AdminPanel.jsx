@@ -45,8 +45,8 @@ const AdminPanel = () => {
   const fetchAllUsers = async () => {
     setLoadingAllUsers(true);
     try {
-      const res = await axiosInstance.get('/api/admin/users'); // эндпоинт для всех пользователей
-      setAllUsers(res.data || []);  // <-- исправлено здесь
+      const res = await axiosInstance.get('/api/admin/users');
+      setAllUsers(res.data.users || []);
     } catch (err) {
       console.error(err);
       setAllUsers([]);
@@ -90,37 +90,29 @@ const AdminPanel = () => {
     fetchAllUsers();
   }, []);
 
-  // Одобрить пользователя
-  const approveUser = async (id) => {
+  // Получение полного профиля пользователя по ID
+  const fetchUserById = async (id) => {
     try {
-      await axiosInstance.patch(`/api/moderator/users/${id}/approve`);
-      fetchUsers();
-      fetchAllUsers();
+      const res = await axiosInstance.get(`/api/admin/users/${id}`);
+      return res.data.user;
     } catch (err) {
-      console.error(err);
+      console.error('Ошибка при загрузке пользователя', err);
+      return null;
     }
   };
 
-  // Удалить пользователя
-  const deleteUser = async (id) => {
-    if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return;
-    try {
-      await axiosInstance.delete(`/api/admin/users/${id}`);
-      fetchAllUsers();
-      fetchUsers();
-    } catch (err) {
-      console.error(err);
-      alert('Ошибка при удалении пользователя');
+  // Открыть модалку редактирования с полной информацией
+  const openEditUser = async (user) => {
+    const fullUser = await fetchUserById(user.id);
+    if (!fullUser) {
+      alert('Не удалось загрузить данные пользователя');
+      return;
     }
-  };
-
-  // Открыть модалку редактирования
-  const openEditUser = (user) => {
-    setEditingUser(user);
+    setEditingUser(fullUser);
     setEditForm({
-      full_name: user.full_name || '',
-      inn: user.inn || '',
-      role: user.role || '',
+      full_name: fullUser.full_name || '',
+      inn: fullUser.inn || '',
+      role: fullUser.role || '',
     });
   };
 
@@ -160,6 +152,30 @@ const AdminPanel = () => {
       (user.full_name && user.full_name.toLowerCase().includes(search))
     );
   });
+
+  // Одобрить пользователя
+  const approveUser = async (id) => {
+    try {
+      await axiosInstance.patch(`/api/moderator/users/${id}/approve`);
+      fetchUsers();
+      fetchAllUsers();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Удалить пользователя
+  const deleteUser = async (id) => {
+    if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return;
+    try {
+      await axiosInstance.delete(`/api/admin/users/${id}`);
+      fetchAllUsers();
+      fetchUsers();
+    } catch (err) {
+      console.error(err);
+      alert('Ошибка при удалении пользователя');
+    }
+  };
 
   // Одобрить заявку
   const approveOrder = async (id) => {
