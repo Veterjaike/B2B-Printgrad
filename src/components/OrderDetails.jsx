@@ -25,10 +25,15 @@ const OrderDetails = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+
   const [regionSuggestions, setRegionSuggestions] = useState([]);
   const [citySuggestions, setCitySuggestions] = useState([]);
   const [showRegionSuggestions, setShowRegionSuggestions] = useState(false);
   const [showCitySuggestions, setShowCitySuggestions] = useState(false);
+
+  const [editRequestComment, setEditRequestComment] = useState('');
+  const [sendingEditRequest, setSendingEditRequest] = useState(false);
+  const [editRequestSent, setEditRequestSent] = useState(false);
 
   const regionRef = useRef(null);
   const cityRef = useRef(null);
@@ -45,9 +50,23 @@ const OrderDetails = () => {
     }
   };
 
+  const getUserId = () => {
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.id;
+    } catch {
+      return null;
+    }
+  };
+
   const userRole = getUserRole();
+  const userId = getUserId();
+
+  // Права
   const canEdit = userRole === 'admin' || userRole === 'moderator';
   const canRespond = userRole === 'исполнитель';
+  const isOwner = order?.user_id === userId;
 
   const axiosInstance = axios.create({
     headers: { Authorization: `Bearer ${token}` },
@@ -62,6 +81,11 @@ const OrderDetails = () => {
           : `/api/orders/${id}`;
         const res = await axiosInstance.get(endpoint);
         setOrder(res.data.order);
+        // Если есть уже запрос на редактирование, показываем статус
+        if (res.data.order.edit_request) {
+          setEditRequestSent(true);
+          setEditRequestComment(res.data.order.edit_reason || '');
+        }
       } catch {
         setError('Ошибка при загрузке заявки');
       } finally {
@@ -176,6 +200,20 @@ const OrderDetails = () => {
     }
   };
 
+  const handleSendEditRequest = async () => {
+    if (!editRequestComment.trim()) return;
+    setSendingEditRequest(true);
+    try {
+      await axiosInstance.post(`/api/orders/${id}/request-edit`, { edit_reason: editRequestComment });
+      alert('Запрос на редактирование отправлен модератору');
+      setEditRequestSent(true);
+    } catch (e) {
+      alert('Ошибка при отправке запроса');
+    } finally {
+      setSendingEditRequest(false);
+    }
+  };
+
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>{error}</p>;
   if (!order) return <p>Заявка не найдена</p>;
@@ -274,6 +312,33 @@ const OrderDetails = () => {
           </select>
         </label>
       </div>
+
+      {/* Для владельца заявки — блок запроса на редактирование */}
+      {!canEdit && isOwner && !editRequestSent && (
+        <div className="edit-request-section">
+          <h3>Запросить изменение заявки</h3>
+          <textarea
+            placeholder="Опишите, что хотите изменить"
+            value={editRequestComment}
+            onChange={(e) => setEditRequestComment(e.target.value)}
+            rows={3}
+          />
+          <button
+            onClick={handleSendEditRequest}
+            disabled={sendingEditRequest || !editRequestComment.trim()}
+          >
+            {sendingEditRequest ? 'Отправляем...' : 'Отправить запрос'}
+          </button>
+        </div>
+      )}
+
+      {/* Если уже отправлен запрос */}
+      {!canEdit && isOwner && editRequestSent && (
+        <div className="edit-request-info">
+          <h3>Запрос на изменение отправлен модератору</h3>
+          <p><b>Комментарий:</b> {editRequestComment}</p>
+        </div>
+      )}
 
       <div className="order-details-buttons">
         {canEdit && (
