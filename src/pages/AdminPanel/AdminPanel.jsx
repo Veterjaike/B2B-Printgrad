@@ -23,7 +23,7 @@ const AdminPanel = () => {
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  // Загрузка пользователей на модерации
+  // Загрузка пользователей, ожидающих одобрения (модерация)
   const fetchUsers = async () => {
     setLoadingUsers(true);
     try {
@@ -38,13 +38,21 @@ const AdminPanel = () => {
     }
   };
 
-  // Загрузка всех пользователей для боковой панели
+  // Загрузка всех пользователей для левой панели
   const fetchAllUsers = async () => {
     setLoadingAllUsers(true);
     try {
       const res = await axiosInstance.get('/api/admin/users');
       console.log('fetchAllUsers data:', res.data);
-      setAllUsers(Array.isArray(res.data.users) ? res.data.users : []);
+      // Убедимся, что приходит массив users (если backend вернул { users: [...] })
+      if (Array.isArray(res.data.users)) {
+        setAllUsers(res.data.users);
+      } else if (Array.isArray(res.data)) {
+        // Иногда сервер может вернуть сразу массив
+        setAllUsers(res.data);
+      } else {
+        setAllUsers([]);
+      }
     } catch (err) {
       console.error(err);
       setAllUsers([]);
@@ -68,7 +76,7 @@ const AdminPanel = () => {
     }
   };
 
-  // Загрузка запросов на редактирование
+  // Загрузка запросов на редактирование заявок
   const fetchEditRequests = async () => {
     setLoadingEditRequests(true);
     try {
@@ -117,7 +125,7 @@ const AdminPanel = () => {
     });
   };
 
-  // Обработка изменения в форме редактирования
+  // Обработка изменений в форме редактирования
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditForm((prev) => ({ ...prev, [name]: value }));
@@ -146,8 +154,9 @@ const AdminPanel = () => {
   };
 
   // Фильтрация пользователей по ID и ФИО
-  const filteredUsers = (Array.isArray(allUsers) ? allUsers : []).filter(user => {
+  const filteredUsers = allUsers.filter(user => {
     const search = searchUserId.trim().toLowerCase();
+    if (!search) return true; // Если строка поиска пустая — показываем всех
     return (
       user.id.toString().includes(search) ||
       (user.full_name && user.full_name.toLowerCase().includes(search))
@@ -216,7 +225,7 @@ const AdminPanel = () => {
               </tr>
             </thead>
             <tbody>
-              {(Array.isArray(filteredUsers) ? filteredUsers : []).map(user => (
+              {filteredUsers.map(user => (
                 <tr key={user.id}>
                   <td>{user.id}</td>
                   <td>{user.full_name}</td>
@@ -239,7 +248,9 @@ const AdminPanel = () => {
           <h2 className="admin-subtitle">Пользователи, ожидающие одобрения</h2>
           {loadingUsers ? (
             <p>Загрузка пользователей...</p>
-          ) : (Array.isArray(users) && users.length > 0) ? (
+          ) : users.length === 0 ? (
+            <p>Нет пользователей на модерации</p>
+          ) : (
             <table className="admin-table">
               <thead>
                 <tr>
@@ -265,8 +276,6 @@ const AdminPanel = () => {
                 ))}
               </tbody>
             </table>
-          ) : (
-            <p>Нет пользователей на модерации</p>
           )}
         </section>
 
@@ -275,7 +284,9 @@ const AdminPanel = () => {
           <h2 className="admin-subtitle">Заявки на одобрение</h2>
           {loadingOrders ? (
             <p>Загрузка заявок...</p>
-          ) : (Array.isArray(orders) && orders.length > 0) ? (
+          ) : orders.length === 0 ? (
+            <p>Нет заявок на модерации</p>
+          ) : (
             <table className="admin-table">
               <thead>
                 <tr>
@@ -311,8 +322,6 @@ const AdminPanel = () => {
                 ))}
               </tbody>
             </table>
-          ) : (
-            <p>Нет заявок на модерации</p>
           )}
         </section>
 
@@ -321,7 +330,9 @@ const AdminPanel = () => {
           <h2 className="admin-subtitle">Запросы на изменение заявок</h2>
           {loadingEditRequests ? (
             <p>Загрузка запросов...</p>
-          ) : (Array.isArray(editRequests) && editRequests.length > 0) ? (
+          ) : editRequests.length === 0 ? (
+            <p>Нет запросов на изменение</p>
+          ) : (
             <table className="admin-table">
               <thead>
                 <tr>
@@ -351,8 +362,6 @@ const AdminPanel = () => {
                 ))}
               </tbody>
             </table>
-          ) : (
-            <p>Нет запросов на изменение</p>
           )}
         </section>
       </div>
