@@ -28,7 +28,7 @@ const AdminPanel = () => {
     setLoadingUsers(true);
     try {
       const res = await axiosInstance.get('/api/moderator/users/pending');
-      setUsers(res.data.users || []);
+      setUsers(res.data || []);  // исправлено
     } catch (err) {
       console.error(err);
       setUsers([]);
@@ -42,7 +42,7 @@ const AdminPanel = () => {
     setLoadingAllUsers(true);
     try {
       const res = await axiosInstance.get('/api/admin/users');
-      setAllUsers(res.data.users || []);
+      setAllUsers(res.data || []);  // исправлено
     } catch (err) {
       console.error(err);
       setAllUsers([]);
@@ -56,7 +56,7 @@ const AdminPanel = () => {
     setLoadingOrders(true);
     try {
       const res = await axiosInstance.get('/api/moderator/orders/pending');
-      setOrders(res.data.orders || []);
+      setOrders(res.data || []);  // исправлено
     } catch (err) {
       console.error(err);
       setOrders([]);
@@ -70,7 +70,7 @@ const AdminPanel = () => {
     setLoadingEditRequests(true);
     try {
       const res = await axiosInstance.get('/api/moderator/orders/edit-requests');
-      setEditRequests(res.data.orders || []);
+      setEditRequests(res.data || []);  // исправлено
     } catch (err) {
       console.error(err);
       setEditRequests([]);
@@ -90,7 +90,7 @@ const AdminPanel = () => {
   const fetchUserById = async (id) => {
     try {
       const res = await axiosInstance.get(`/api/admin/users/${id}`);
-      return res.data.user;
+      return res.data || null;  // исправлено
     } catch (err) {
       console.error('Ошибка при загрузке пользователя', err);
       return null;
@@ -112,13 +112,11 @@ const AdminPanel = () => {
     });
   };
 
-  // Обработка изменения в форме редактирования
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Сохранить изменения пользователя
   const saveUserChanges = async () => {
     if (!editingUser) return;
     setSavingUser(true);
@@ -135,7 +133,6 @@ const AdminPanel = () => {
     }
   };
 
-  // Закрыть модальное окно
   const closeEditModal = () => {
     setEditingUser(null);
   };
@@ -149,7 +146,6 @@ const AdminPanel = () => {
     );
   });
 
-  // Одобрить пользователя
   const approveUser = async (id) => {
     try {
       await axiosInstance.patch(`/api/moderator/users/${id}/approve`);
@@ -160,7 +156,6 @@ const AdminPanel = () => {
     }
   };
 
-  // Удалить пользователя
   const deleteUser = async (id) => {
     if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return;
     try {
@@ -173,7 +168,6 @@ const AdminPanel = () => {
     }
   };
 
-  // Одобрить заявку
   const approveOrder = async (id) => {
     try {
       await axiosInstance.patch(`/api/moderator/orders/${id}/approve`);
@@ -186,7 +180,6 @@ const AdminPanel = () => {
 
   return (
     <div className="admin-panel" style={{ display: 'flex', gap: '20px' }}>
-      {/* Левая боковая панель с пользователями и поиском */}
       <aside style={{ flexBasis: '350px', maxHeight: '90vh', overflowY: 'auto' }}>
         <h2 className="admin-subtitle">Все пользователи</h2>
         <input
@@ -227,9 +220,7 @@ const AdminPanel = () => {
         )}
       </aside>
 
-      {/* Основной контент */}
       <div style={{ flexGrow: 1, overflowY: 'auto', maxHeight: '90vh' }}>
-        {/* Пользователи на одобрении */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Пользователи, ожидающие одобрения</h2>
           {loadingUsers ? (
@@ -265,7 +256,6 @@ const AdminPanel = () => {
           )}
         </section>
 
-        {/* Заявки */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Заявки на одобрение</h2>
           {loadingOrders ? (
@@ -311,7 +301,6 @@ const AdminPanel = () => {
           )}
         </section>
 
-        {/* Запросы на редактирование заявок */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Запросы на изменение заявок</h2>
           {loadingEditRequests ? (
@@ -352,7 +341,6 @@ const AdminPanel = () => {
         </section>
       </div>
 
-      {/* Модальное окно редактирования пользователя */}
       {editingUser && (
         <div className="modal-overlay">
           <div className="modal">
