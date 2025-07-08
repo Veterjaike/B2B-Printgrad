@@ -44,11 +44,9 @@ const AdminPanel = () => {
     try {
       const res = await axiosInstance.get('/api/admin/users');
       console.log('fetchAllUsers data:', res.data);
-      // Убедимся, что приходит массив users (если backend вернул { users: [...] })
       if (Array.isArray(res.data.users)) {
         setAllUsers(res.data.users);
       } else if (Array.isArray(res.data)) {
-        // Иногда сервер может вернуть сразу массив
         setAllUsers(res.data);
       } else {
         setAllUsers([]);
@@ -98,10 +96,10 @@ const AdminPanel = () => {
     fetchAllUsers();
   }, []);
 
-  // Получение полного профиля пользователя по ID
+  // Получение полного профиля пользователя по ID (исправлен путь)
   const fetchUserById = async (id) => {
     try {
-      const res = await axiosInstance.get(`/api/admin/users/${id}`);
+      const res = await axiosInstance.get(`/api/moderator/users/${id}`); // исправлено здесь
       console.log('fetchUserById data:', res.data);
       return res.data.user || null;
     } catch (err) {
@@ -156,7 +154,7 @@ const AdminPanel = () => {
   // Фильтрация пользователей по ID и ФИО
   const filteredUsers = allUsers.filter(user => {
     const search = searchUserId.trim().toLowerCase();
-    if (!search) return true; // Если строка поиска пустая — показываем всех
+    if (!search) return true;
     return (
       user.id.toString().includes(search) ||
       (user.full_name && user.full_name.toLowerCase().includes(search))
@@ -174,11 +172,11 @@ const AdminPanel = () => {
     }
   };
 
-  // Удалить пользователя
+  // Удалить пользователя (исправлен путь)
   const deleteUser = async (id) => {
     if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return;
     try {
-      await axiosInstance.delete(`/api/admin/users/${id}`);
+      await axiosInstance.delete(`/api/moderator/users/${id}`); // исправлено здесь
       await fetchAllUsers();
       await fetchUsers();
     } catch (err) {
