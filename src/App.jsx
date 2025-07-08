@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import ProtectedRoute from './pages/RegPage/ProtectedRoute';
+import AdminRoute from './pages/RegPage/AdminRoute'; // 👈 добавлено
 import Header from './components/Header';
 import './App.css';
 import { Home, Profile } from './pages';
@@ -29,14 +30,18 @@ function App() {
         <Routes location={location}>
           <Route path="/" element={<Home />} />
 
-          {/* Защищённые маршруты */}
+          {/* 🔐 Общие защищённые маршруты */}
           <Route element={<ProtectedRoute />}>
             <Route path="orders" element={<Orders />} />
-            <Route path="orders/:id" element={<OrderDetails />} />
             <Route path="profile" element={<Profile />} />
             <Route path="myorders" element={<MyOrders />} />
             <Route path="create-order" element={<CreateOrder />} />
+          </Route>
+
+          {/* 🔐 Только для admin/moderator */}
+          <Route element={<AdminRoute />}>
             <Route path="admin" element={<AdminPanel />} />
+            <Route path="orders/:id" element={<OrderDetails />} />
           </Route>
 
           <Route path="registration" element={<RegPage />} />
