@@ -1,41 +1,25 @@
-import { Navigate, Outlet } from 'react-router-dom';
+const token = localStorage.getItem('token');
 
-export default function ProtectedRoute() {
-  const token = localStorage.getItem('token');
+if (!token) {
+  return <Navigate to="/registration" replace />;
+}
 
-  if (!token) {
-    console.log('ProtectedRoute: токен отсутствует');
-    return <Navigate to="/registration" replace />;
-  }
+// Проверяем структуру JWT
+const parts = token.split('.');
+if (parts.length !== 3) {
+  localStorage.removeItem('token');
+  return <Navigate to="/registration" replace />;
+}
 
-  try {
-    const payloadBase64 = token.split('.')[1];
-    if (!payloadBase64) {
-      console.log('ProtectedRoute: неверный формат токена');
-      localStorage.removeItem('token');
-      return <Navigate to="/registration" replace />;
-    }
-    const payloadJson = atob(payloadBase64);
-    const payload = JSON.parse(payloadJson);
-
-    console.log('ProtectedRoute: payload', payload);
-
-    if (!payload.exp) {
-      console.log('ProtectedRoute: в токене нет exp');
-      localStorage.removeItem('token');
-      return <Navigate to="/registration" replace />;
-    }
-
-    if (Date.now() >= payload.exp * 1000) {
-      console.log('ProtectedRoute: токен истёк');
-      localStorage.removeItem('token');
-      return <Navigate to="/registration" replace />;
-    }
-  } catch (err) {
-    console.error('ProtectedRoute: ошибка при разборе токена', err);
+try {
+  const payload = JSON.parse(atob(parts[1]));
+  if (Date.now() >= payload.exp * 1000) {
     localStorage.removeItem('token');
     return <Navigate to="/registration" replace />;
   }
-
-  return <Outlet />;
+} catch (err) {
+  localStorage.removeItem('token');
+  return <Navigate to="/registration" replace />;
 }
+
+return <Outlet />;
