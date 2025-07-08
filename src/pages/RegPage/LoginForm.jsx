@@ -22,13 +22,15 @@ export default function LoginForm () {
 
             if (response.ok) {
                 localStorage.setItem('token', data.token);
+                console.log('Token saved to localStorage:', data.token);  // <-- вывод токена в консоль
                 toast.success('Успешный вход!');
                 setTimeout(() => navigate('/profile'), 1500);
             } else {
                 toast.error(data.error || 'Ошибка входа');
+                console.log('Ошибка входа:', data.error);
             }
         } catch (err) {
-            console.error(err);
+            console.error('Сервер недоступен:', err);
             toast.error('Сервер недоступен');
         }
     };
