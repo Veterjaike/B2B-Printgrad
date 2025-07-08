@@ -1,25 +1,30 @@
-const token = localStorage.getItem('token');
+import React from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
 
-if (!token) {
-  return <Navigate to="/registration" replace />;
-}
+export default function ProtectedRoute() {
+  const token = localStorage.getItem('token');
 
-// Проверяем структуру JWT
-const parts = token.split('.');
-if (parts.length !== 3) {
-  localStorage.removeItem('token');
-  return <Navigate to="/registration" replace />;
-}
+  if (!token) {
+    return <Navigate to="/registration" replace />;
+  }
 
-try {
-  const payload = JSON.parse(atob(parts[1]));
-  if (Date.now() >= payload.exp * 1000) {
+  // Проверяем структуру JWT
+  const parts = token.split('.');
+  if (parts.length !== 3) {
     localStorage.removeItem('token');
     return <Navigate to="/registration" replace />;
   }
-} catch (err) {
-  localStorage.removeItem('token');
-  return <Navigate to="/registration" replace />;
-}
 
-return <Outlet />;
+  try {
+    const payload = JSON.parse(atob(parts[1]));
+    if (Date.now() >= payload.exp * 1000) {
+      localStorage.removeItem('token');
+      return <Navigate to="/registration" replace />;
+    }
+  } catch (err) {
+    localStorage.removeItem('token');
+    return <Navigate to="/registration" replace />;
+  }
+
+  return <Outlet />;
+}
