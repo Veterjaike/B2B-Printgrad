@@ -10,6 +10,7 @@ import RegPage from './pages/RegPage/RegPage';
 import MyOrders from './pages/MyOrders/MyOrders';
 import CreateOrder from './pages/CreateOrder/CreateOrder';
 import AdminPanel from './pages/AdminPanel/AdminPanel';
+import OrderDetails from './components/OrderDetails';
 
 function App() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function App() {
           {/* Защищённые маршруты */}
           <Route element={<ProtectedRoute />}>
             <Route path="orders" element={<Orders />} />
+            <Route path="orders/:id" element={<OrderDetails />} />
             <Route path="profile" element={<Profile />} />
             <Route path="myorders" element={<MyOrders />} />
             <Route path="create-order" element={<CreateOrder />} />
