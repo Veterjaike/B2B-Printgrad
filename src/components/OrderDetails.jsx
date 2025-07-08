@@ -25,7 +25,6 @@ const OrderDetails = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
-
   const [regionSuggestions, setRegionSuggestions] = useState([]);
   const [citySuggestions, setCitySuggestions] = useState([]);
   const [showRegionSuggestions, setShowRegionSuggestions] = useState(false);
@@ -184,7 +183,6 @@ const OrderDetails = () => {
   return (
     <div className="order-details-container">
       <h1>Заявка #{order.id}</h1>
-
       <div className="order-details-grid">
         <label>
           Заголовок:
@@ -224,16 +222,8 @@ const OrderDetails = () => {
         </label>
 
         <div className="autocomplete" ref={regionRef}>
-          <label>
-            Регион:
-            <input
-              type="text"
-              name="region"
-              value={order.region || ''}
-              onChange={handleChange}
-              onFocus={() => setShowRegionSuggestions(true)}
-              disabled={!canEdit}
-            />
+          <label>Регион:
+            <input type="text" name="region" value={order.region || ''} onChange={handleChange} onFocus={() => setShowRegionSuggestions(true)} disabled={!canEdit} />
           </label>
           {showRegionSuggestions && regionSuggestions.length > 0 && (
             <ul className="suggestions-list">
@@ -245,17 +235,8 @@ const OrderDetails = () => {
         </div>
 
         <div className="autocomplete" ref={cityRef}>
-          <label>
-            Город:
-            <input
-              type="text"
-              name="city"
-              value={order.city || ''}
-              onChange={handleChange}
-              onFocus={() => setShowCitySuggestions(true)}
-              disabled={!canEdit || !order.region}
-              placeholder={order.region ? '' : 'Сначала выберите регион'}
-            />
+          <label>Город:
+            <input type="text" name="city" value={order.city || ''} onChange={handleChange} onFocus={() => setShowCitySuggestions(true)} disabled={!canEdit || !order.region} placeholder={order.region ? '' : 'Сначала выберите регион'} />
           </label>
           {showCitySuggestions && citySuggestions.length > 0 && (
             <ul className="suggestions-list">
@@ -297,9 +278,7 @@ const OrderDetails = () => {
       <div className="order-details-buttons">
         {canEdit && (
           <>
-            <button onClick={handleSave} disabled={saving}>
-              {saving ? 'Сохраняем...' : 'Сохранить'}
-            </button>
+            <button onClick={handleSave} disabled={saving}>{saving ? 'Сохраняем...' : 'Сохранить'}</button>
             <button onClick={() => navigate(-1)}>Закрыть</button>
           </>
         )}
@@ -309,9 +288,7 @@ const OrderDetails = () => {
             <button onClick={() => navigate(-1)}>Закрыть</button>
           </>
         )}
-        {!canEdit && !canRespond && (
-          <button onClick={() => navigate(-1)}>Закрыть</button>
-        )}
+        {!canEdit && !canRespond && <button onClick={() => navigate(-1)}>Закрыть</button>}
       </div>
     </div>
   );
