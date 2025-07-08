@@ -184,7 +184,7 @@ const AdminPanel = () => {
                       className="edit-btn"
                       onClick={() => window.location.href = `/orders/${order.id}`}
                     >
-                      Подробнее
+                      Подробнее/редактировать
                     </button>
                   </td>
                 </tr>
