@@ -3,6 +3,34 @@
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
+
+  display: flex;
+  gap: 20px;
+}
+
+.admin-panel > aside {
+  flex-basis: 300px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background: #fafafa;
+  border-radius: 6px;
+}
+
+.admin-panel > div {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Стили для поиска */
+.search-input {
+  width: 100%;
+  padding: 6px 8px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 .admin-title {
@@ -24,10 +52,15 @@
   border-collapse: collapse;
 }
 
+.admin-table.small-table {
+  font-size: 0.9rem;
+}
+
 .admin-table th,
 .admin-table td {
   border: 1px solid #ddd;
   padding: 8px;
+  word-break: break-word;
 }
 
 .admin-table th {
@@ -53,12 +86,26 @@
   border-radius: 4px;
 }
 
+.delete-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-left: 6px;
+}
+
 .approve-btn:hover {
   background-color: #45a049;
 }
 
 .edit-btn:hover {
   background-color: #0b7dda;
+}
+
+.delete-btn:hover {
+  background-color: #d32f2f;
 }
 
 /* Модальное окно */
@@ -72,6 +119,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999;
 }
 
 .modal {
