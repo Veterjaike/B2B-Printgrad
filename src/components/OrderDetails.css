@@ -1,88 +1,111 @@
-.order-details {
-  max-width: 600px;
+/* Контейнер заявки */
+.order-details-container {
+  max-width: 900px;
   margin: 20px auto;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  padding: 20px 30px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   font-family: Arial, sans-serif;
-}
-
-.order-details h1 {
-  margin-bottom: 20px;
-  font-size: 24px;
-  text-align: center;
-}
-
-.order-details label {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 15px;
-  font-weight: 600;
-  font-size: 14px;
   color: #333;
 }
 
-.order-details input,
-.order-details textarea,
-.order-details select {
-  margin-top: 6px;
-  padding: 8px 10px;
-  font-size: 14px;
-  border: 1.5px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.2s;
-}
-
-.order-details input:focus,
-.order-details textarea:focus,
-.order-details select:focus {
-  outline: none;
-  border-color: #007bff;
-}
-
-.order-details textarea {
-  resize: vertical;
-  min-height: 80px;
-}
-
-.buttons {
-  margin-top: 25px;
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-}
-
-.buttons button {
-  cursor: pointer;
-  padding: 10px 20px;
-  font-weight: 600;
-  font-size: 15px;
-  border: none;
-  border-radius: 5px;
-  color: white;
-  background-color: #007bff;
-  transition: background-color 0.3s;
-}
-
-.buttons button:hover:not(:disabled) {
-  background-color: #0056b3;
-}
-
-.buttons button:disabled {
-  background-color: #7da6d9;
-  cursor: default;
-}
-
-.loading,
-.error {
-  max-width: 600px;
-  margin: 50px auto;
-  font-size: 18px;
-  color: #666;
+/* Заголовок */
+.order-details-container h1 {
+  margin-bottom: 25px;
+  font-weight: 700;
+  font-size: 28px;
   text-align: center;
 }
 
-.error {
-  color: #d9534f;
+/* Сетка полей: 2 колонки с отступами */
+.order-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 30px;
+}
+
+/* Для textarea и лейблов, которые занимают 2 колонки */
+.order-details-grid .full-width {
+  grid-column: 1 / -1;
+}
+
+/* Лейблы */
+.order-details-grid label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Поля ввода */
+.order-details-grid input[type="text"],
+.order-details-grid input[type="number"],
+.order-details-grid input[type="date"],
+.order-details-grid select,
+.order-details-grid textarea {
+  margin-top: 6px;
+  padding: 8px 10px;
+  font-size: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+  resize: vertical;
+}
+
+/* Поля при фокусе */
+.order-details-grid input[type="text"]:focus,
+.order-details-grid input[type="number"]:focus,
+.order-details-grid input[type="date"]:focus,
+.order-details-grid select:focus,
+.order-details-grid textarea:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+}
+
+/* Параграфы с данными, если нет редактирования */
+.order-details-grid p {
+  margin-top: 6px;
+  padding: 8px 10px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  min-height: 36px;
+  font-size: 15px;
+  color: #555;
+  white-space: pre-wrap;
+}
+
+/* Кнопки */
+.order-details-buttons {
+  margin-top: 30px;
+  text-align: center;
+}
+
+/* Общий стиль кнопок */
+.order-details-buttons button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 22px;
+  margin: 0 8px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  min-width: 120px;
+}
+
+/* Кнопка при наведении */
+.order-details-buttons button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+/* Кнопка при отключении */
+.order-details-buttons button:disabled {
+  background-color: #a6c8ff;
+  cursor: not-allowed;
 }
