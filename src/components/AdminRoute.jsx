@@ -10,14 +10,19 @@ export default function AdminRoute() {
     const isExpired = Date.now() >= payload.exp * 1000;
     const isAdminOrModerator = ['admin', 'moderator'].includes(payload.role);
 
-    if (isExpired || !isAdminOrModerator) {
+    if (isExpired) {
       localStorage.removeItem('token');
+      return <Navigate to="/registration" replace />;
+    }
+
+    if (!isAdminOrModerator) {
+      // Просто редирект без удаления токена, чтобы не ломать сессии других ролей
       return <Navigate to="/profile" replace />;
     }
 
     return <Outlet />;
   } catch {
     localStorage.removeItem('token');
-    return <Navigate to="/profile" replace />;
+    return <Navigate to="/registration" replace />;
   }
 }
