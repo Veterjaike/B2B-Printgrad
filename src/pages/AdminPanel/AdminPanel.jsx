@@ -10,21 +10,17 @@ const AdminPanel = () => {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [loadingEditRequests, setLoadingEditRequests] = useState(false);
 
-  // Для редактирования пользователя
   const [editingUser, setEditingUser] = useState(null);
   const [editForm, setEditForm] = useState({ full_name: '', inn: '', role: '' });
   const [savingUser, setSavingUser] = useState(false);
 
-  // Поиск пользователей
   const [searchUserId, setSearchUserId] = useState('');
   const [allUsers, setAllUsers] = useState([]);
   const [loadingAllUsers, setLoadingAllUsers] = useState(false);
 
   const token = localStorage.getItem('token');
   const axiosInstance = axios.create({
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   // Загрузка пользователей на модерации
@@ -116,7 +112,7 @@ const AdminPanel = () => {
     });
   };
 
-  // Изменение в форме редактирования
+  // Обработка изменения в форме редактирования
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditForm((prev) => ({ ...prev, [name]: value }));
@@ -129,8 +125,8 @@ const AdminPanel = () => {
     try {
       await axiosInstance.patch(`/api/moderator/users/${editingUser.id}`, editForm);
       setEditingUser(null);
-      fetchUsers();
-      fetchAllUsers();
+      await fetchUsers();
+      await fetchAllUsers();
     } catch (err) {
       console.error(err);
       alert('Ошибка при сохранении данных пользователя');
@@ -139,7 +135,7 @@ const AdminPanel = () => {
     }
   };
 
-  // Закрыть модалку редактирования
+  // Закрыть модальное окно
   const closeEditModal = () => {
     setEditingUser(null);
   };
@@ -157,8 +153,8 @@ const AdminPanel = () => {
   const approveUser = async (id) => {
     try {
       await axiosInstance.patch(`/api/moderator/users/${id}/approve`);
-      fetchUsers();
-      fetchAllUsers();
+      await fetchUsers();
+      await fetchAllUsers();
     } catch (err) {
       console.error(err);
     }
@@ -169,8 +165,8 @@ const AdminPanel = () => {
     if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return;
     try {
       await axiosInstance.delete(`/api/admin/users/${id}`);
-      fetchAllUsers();
-      fetchUsers();
+      await fetchAllUsers();
+      await fetchUsers();
     } catch (err) {
       console.error(err);
       alert('Ошибка при удалении пользователя');
@@ -181,8 +177,8 @@ const AdminPanel = () => {
   const approveOrder = async (id) => {
     try {
       await axiosInstance.patch(`/api/moderator/orders/${id}/approve`);
-      fetchOrders();
-      fetchEditRequests();
+      await fetchOrders();
+      await fetchEditRequests();
     } catch (err) {
       console.error(err);
     }
