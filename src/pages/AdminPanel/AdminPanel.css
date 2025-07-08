@@ -1,38 +1,51 @@
 .admin-panel {
-  padding: 20px;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
 .admin-title {
-  font-size: 28px;
+  font-size: 2rem;
   margin-bottom: 20px;
-}
-
-.admin-subtitle {
-  font-size: 22px;
-  margin-bottom: 12px;
 }
 
 .admin-section {
   margin-bottom: 40px;
 }
 
+.admin-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #ccc;
 }
 
 .admin-table th,
 .admin-table td {
-  border: 1px solid #ccc;
-  padding: 8px 12px;
-  text-align: left;
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.admin-table th {
+  background-color: #f0f0f0;
 }
 
 .approve-btn {
-  background-color: #28a745;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.edit-btn {
+  background-color: #2196F3;
   color: white;
   border: none;
   padding: 6px 12px;
@@ -41,5 +54,59 @@
 }
 
 .approve-btn:hover {
-  background-color: #218838;
+  background-color: #45a049;
+}
+
+.edit-btn:hover {
+  background-color: #0b7dda;
+}
+
+/* Модальное окно */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background-color: white;
+  padding: 20px;
+  width: 350px;
+  border-radius: 8px;
+}
+
+.modal h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.modal label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.modal input,
+.modal select {
+  width: 100%;
+  padding: 6px;
+  margin-top: 4px;
+  box-sizing: border-box;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.modal-buttons button {
+  padding: 6px 14px;
+  margin-left: 10px;
+  cursor: pointer;
 }
