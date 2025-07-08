@@ -9,6 +9,7 @@ import Orders from './pages/Orders/Orders';
 import RegPage from './pages/RegPage/RegPage';
 import MyOrders from './pages/MyOrders/MyOrders';
 import CreateOrder from './pages/CreateOrder/CreateOrder';
+import AdminPanel from './pages/AdminPanel/AdminPanel';
 
 function App() {
   const location = useLocation();
@@ -33,6 +34,7 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="myorders" element={<MyOrders />} />
             <Route path="create-order" element={<CreateOrder />} />
+            <Route path="admin" element={<AdminPanel />} />
           </Route>
 
           <Route path="registration" element={<RegPage />} />
