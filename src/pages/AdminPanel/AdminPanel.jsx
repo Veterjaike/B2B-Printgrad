@@ -92,7 +92,7 @@ const AdminPanel = () => {
     if (!editingUser) return;
     setSavingUser(true);
     try {
-      const res = await axiosInstance.patch(`/api/moderator/users/${editingUser.id}`, editForm);
+      await axiosInstance.patch(`/api/moderator/users/${editingUser.id}`, editForm);
       setEditingUser(null);
       fetchUsers();
     } catch (err) {
@@ -163,6 +163,7 @@ const AdminPanel = () => {
                 <th>Категория</th>
                 <th>Бюджет</th>
                 <th>Статус</th>
+                <th>Запрос на редактирование</th>
                 <th>Действия</th>
               </tr>
             </thead>
@@ -173,6 +174,15 @@ const AdminPanel = () => {
                   <td>{order.category}</td>
                   <td>{order.budget}</td>
                   <td>{order.moderation_status}</td>
+                  <td>
+                    {order.edit_request ? (
+                      <span title={order.edit_reason || 'Комментарий отсутствует'} style={{color: 'orange', cursor: 'help'}}>
+                        Запрошено
+                      </span>
+                    ) : (
+                      '-'
+                    )}
+                  </td>
                   <td>
                     <button
                       className="approve-btn"
