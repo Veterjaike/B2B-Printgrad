@@ -5,8 +5,10 @@ import './AdminPanel.css';
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [editRequests, setEditRequests] = useState([]); // Запросы на редактирование
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [loadingOrders, setLoadingOrders] = useState(false);
+  const [loadingEditRequests, setLoadingEditRequests] = useState(false);
 
   // Для редактирования пользователя
   const [editingUser, setEditingUser] = useState(null);
@@ -48,9 +50,25 @@ const AdminPanel = () => {
     }
   };
 
+  // Загрузка запросов на редактирование
+  const fetchEditRequests = async () => {
+    setLoadingEditRequests(true);
+    try {
+      // Предполагается, что есть эндпоинт для получения всех заявок с запросом на редактирование
+      const res = await axiosInstance.get('/api/moderator/orders/edit-requests');
+      setEditRequests(res.data.orders || []);
+    } catch (err) {
+      console.error(err);
+      setEditRequests([]);
+    } finally {
+      setLoadingEditRequests(false);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
     fetchOrders();
+    fetchEditRequests();
   }, []);
 
   const approveUser = async (id) => {
@@ -66,6 +84,7 @@ const AdminPanel = () => {
     try {
       await axiosInstance.patch(`/api/moderator/orders/${id}/approve`);
       fetchOrders();
+      fetchEditRequests(); // обновляем список запросов, если одобрили заявку
     } catch (err) {
       console.error(err);
     }
@@ -163,7 +182,6 @@ const AdminPanel = () => {
                 <th>Категория</th>
                 <th>Бюджет</th>
                 <th>Статус</th>
-                <th>Запрос на редактирование</th>
                 <th>Действия</th>
               </tr>
             </thead>
@@ -174,15 +192,6 @@ const AdminPanel = () => {
                   <td>{order.category}</td>
                   <td>{order.budget}</td>
                   <td>{order.moderation_status}</td>
-                  <td>
-                    {order.edit_request ? (
-                      <span title={order.edit_reason || 'Комментарий отсутствует'} style={{color: 'orange', cursor: 'help'}}>
-                        Запрошено
-                      </span>
-                    ) : (
-                      '-'
-                    )}
-                  </td>
                   <td>
                     <button
                       className="approve-btn"
@@ -195,6 +204,46 @@ const AdminPanel = () => {
                       onClick={() => window.location.href = `/orders/${order.id}`}
                     >
                       Подробнее/редактировать
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </section>
+
+      {/* Запросы на редактирование заявок */}
+      <section className="admin-section">
+        <h2 className="admin-subtitle">Запросы на изменение заявок</h2>
+        {loadingEditRequests ? (
+          <p>Загрузка запросов...</p>
+        ) : editRequests.length === 0 ? (
+          <p>Нет запросов на изменение</p>
+        ) : (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Заголовок</th>
+                <th>Категория</th>
+                <th>Бюджет</th>
+                <th>Комментарий к запросу</th>
+                <th>Действия</th>
+              </tr>
+            </thead>
+            <tbody>
+              {editRequests.map(order => (
+                <tr key={order.id}>
+                  <td>{order.title}</td>
+                  <td>{order.category}</td>
+                  <td>{order.budget}</td>
+                  <td>{order.edit_reason || '-'}</td>
+                  <td>
+                    <button
+                      className="edit-btn"
+                      onClick={() => window.location.href = `/orders/${order.id}`}
+                    >
+                      Редактировать
                     </button>
                   </td>
                 </tr>
