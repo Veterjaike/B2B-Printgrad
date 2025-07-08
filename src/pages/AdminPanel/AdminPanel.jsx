@@ -7,10 +7,20 @@ const AdminPanel = () => {
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [loadingOrders, setLoadingOrders] = useState(false);
 
+  // Получаем токен из localStorage
+  const token = localStorage.getItem('token');
+
+  // Настраиваем axios с заголовком Authorization
+  const axiosInstance = axios.create({
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
   const fetchUsers = async () => {
     setLoadingUsers(true);
     try {
-      const res = await axios.get('/api/moderator/users/pending');
+      const res = await axiosInstance.get('/api/moderator/users/pending');
       setUsers(res.data.users || []);  // защита от undefined
     } catch (err) {
       console.error(err);
@@ -23,7 +33,7 @@ const AdminPanel = () => {
   const fetchOrders = async () => {
     setLoadingOrders(true);
     try {
-      const res = await axios.get('/api/moderator/orders/pending');
+      const res = await axiosInstance.get('/api/moderator/orders/pending');
       setOrders(res.data.orders || []);  // защита от undefined
     } catch (err) {
       console.error(err);
@@ -40,7 +50,7 @@ const AdminPanel = () => {
 
   const approveUser = async (id) => {
     try {
-      await axios.post(`/api/moderator/users/${id}/approve`);
+      await axiosInstance.patch(`/api/moderator/users/${id}/approve`);
       fetchUsers();
     } catch (err) {
       console.error(err);
@@ -49,7 +59,7 @@ const AdminPanel = () => {
 
   const approveOrder = async (id) => {
     try {
-      await axios.post(`/api/moderator/orders/${id}/approve`);
+      await axiosInstance.patch(`/api/moderator/orders/${id}/approve`);
       fetchOrders();
     } catch (err) {
       console.error(err);
