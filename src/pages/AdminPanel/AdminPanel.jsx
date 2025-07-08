@@ -10,17 +10,21 @@ const AdminPanel = () => {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [loadingEditRequests, setLoadingEditRequests] = useState(false);
 
+  // Для редактирования пользователя
   const [editingUser, setEditingUser] = useState(null);
   const [editForm, setEditForm] = useState({ full_name: '', inn: '', role: '' });
   const [savingUser, setSavingUser] = useState(false);
 
+  // Поиск пользователей
   const [searchUserId, setSearchUserId] = useState('');
   const [allUsers, setAllUsers] = useState([]);
   const [loadingAllUsers, setLoadingAllUsers] = useState(false);
 
   const token = localStorage.getItem('token');
   const axiosInstance = axios.create({
-    headers: { Authorization: `Bearer ${token}` },
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   // Загрузка пользователей на модерации
@@ -28,7 +32,7 @@ const AdminPanel = () => {
     setLoadingUsers(true);
     try {
       const res = await axiosInstance.get('/api/moderator/users/pending');
-      setUsers(res.data || []);  // исправлено
+      setUsers(res.data.users || []);
     } catch (err) {
       console.error(err);
       setUsers([]);
@@ -41,8 +45,8 @@ const AdminPanel = () => {
   const fetchAllUsers = async () => {
     setLoadingAllUsers(true);
     try {
-      const res = await axiosInstance.get('/api/admin/users');
-      setAllUsers(res.data || []);  // исправлено
+      const res = await axiosInstance.get('/api/admin/users'); // эндпоинт для всех пользователей
+      setAllUsers(res.data.users || []);
     } catch (err) {
       console.error(err);
       setAllUsers([]);
@@ -56,7 +60,7 @@ const AdminPanel = () => {
     setLoadingOrders(true);
     try {
       const res = await axiosInstance.get('/api/moderator/orders/pending');
-      setOrders(res.data || []);  // исправлено
+      setOrders(res.data.orders || []);
     } catch (err) {
       console.error(err);
       setOrders([]);
@@ -70,7 +74,7 @@ const AdminPanel = () => {
     setLoadingEditRequests(true);
     try {
       const res = await axiosInstance.get('/api/moderator/orders/edit-requests');
-      setEditRequests(res.data || []);  // исправлено
+      setEditRequests(res.data.orders || []);
     } catch (err) {
       console.error(err);
       setEditRequests([]);
@@ -86,45 +90,55 @@ const AdminPanel = () => {
     fetchAllUsers();
   }, []);
 
-  // Получение полного профиля пользователя по ID
-  const fetchUserById = async (id) => {
+  // Одобрить пользователя
+  const approveUser = async (id) => {
     try {
-      const res = await axiosInstance.get(`/api/admin/users/${id}`);
-      return res.data || null;  // исправлено
+      await axiosInstance.patch(`/api/moderator/users/${id}/approve`);
+      fetchUsers();
+      fetchAllUsers();
     } catch (err) {
-      console.error('Ошибка при загрузке пользователя', err);
-      return null;
+      console.error(err);
     }
   };
 
-  // Открыть модалку редактирования с полной информацией
-  const openEditUser = async (user) => {
-    const fullUser = await fetchUserById(user.id);
-    if (!fullUser) {
-      alert('Не удалось загрузить данные пользователя');
-      return;
+  // Удалить пользователя
+  const deleteUser = async (id) => {
+    if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return;
+    try {
+      await axiosInstance.delete(`/api/admin/users/${id}`);
+      fetchAllUsers();
+      fetchUsers();
+    } catch (err) {
+      console.error(err);
+      alert('Ошибка при удалении пользователя');
     }
-    setEditingUser(fullUser);
+  };
+
+  // Открыть модалку редактирования
+  const openEditUser = (user) => {
+    setEditingUser(user);
     setEditForm({
-      full_name: fullUser.full_name || '',
-      inn: fullUser.inn || '',
-      role: fullUser.role || '',
+      full_name: user.full_name || '',
+      inn: user.inn || '',
+      role: user.role || '',
     });
   };
 
+  // Изменение в форме редактирования
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditForm((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Сохранить изменения пользователя
   const saveUserChanges = async () => {
     if (!editingUser) return;
     setSavingUser(true);
     try {
       await axiosInstance.patch(`/api/moderator/users/${editingUser.id}`, editForm);
       setEditingUser(null);
-      await fetchUsers();
-      await fetchAllUsers();
+      fetchUsers();
+      fetchAllUsers();
     } catch (err) {
       console.error(err);
       alert('Ошибка при сохранении данных пользователя');
@@ -133,6 +147,7 @@ const AdminPanel = () => {
     }
   };
 
+  // Закрыть модалку редактирования
   const closeEditModal = () => {
     setEditingUser(null);
   };
@@ -146,33 +161,12 @@ const AdminPanel = () => {
     );
   });
 
-  const approveUser = async (id) => {
-    try {
-      await axiosInstance.patch(`/api/moderator/users/${id}/approve`);
-      await fetchUsers();
-      await fetchAllUsers();
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const deleteUser = async (id) => {
-    if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return;
-    try {
-      await axiosInstance.delete(`/api/admin/users/${id}`);
-      await fetchAllUsers();
-      await fetchUsers();
-    } catch (err) {
-      console.error(err);
-      alert('Ошибка при удалении пользователя');
-    }
-  };
-
+  // Одобрить заявку
   const approveOrder = async (id) => {
     try {
       await axiosInstance.patch(`/api/moderator/orders/${id}/approve`);
-      await fetchOrders();
-      await fetchEditRequests();
+      fetchOrders();
+      fetchEditRequests();
     } catch (err) {
       console.error(err);
     }
@@ -180,6 +174,7 @@ const AdminPanel = () => {
 
   return (
     <div className="admin-panel" style={{ display: 'flex', gap: '20px' }}>
+      {/* Левая боковая панель с пользователями и поиском */}
       <aside style={{ flexBasis: '350px', maxHeight: '90vh', overflowY: 'auto' }}>
         <h2 className="admin-subtitle">Все пользователи</h2>
         <input
@@ -220,7 +215,9 @@ const AdminPanel = () => {
         )}
       </aside>
 
+      {/* Основной контент */}
       <div style={{ flexGrow: 1, overflowY: 'auto', maxHeight: '90vh' }}>
+        {/* Пользователи на одобрении */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Пользователи, ожидающие одобрения</h2>
           {loadingUsers ? (
@@ -256,6 +253,7 @@ const AdminPanel = () => {
           )}
         </section>
 
+        {/* Заявки */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Заявки на одобрение</h2>
           {loadingOrders ? (
@@ -301,6 +299,7 @@ const AdminPanel = () => {
           )}
         </section>
 
+        {/* Запросы на редактирование заявок */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Запросы на изменение заявок</h2>
           {loadingEditRequests ? (
@@ -341,6 +340,7 @@ const AdminPanel = () => {
         </section>
       </div>
 
+      {/* Модальное окно редактирования пользователя */}
       {editingUser && (
         <div className="modal-overlay">
           <div className="modal">
