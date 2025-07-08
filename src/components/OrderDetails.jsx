@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './OrderDetails.css';
 
 const OrderDetails = () => {
   const { id } = useParams();
@@ -12,6 +11,21 @@ const OrderDetails = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
+  // Получаем роль пользователя из токена
+  const getUserRole = () => {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.role;
+    } catch {
+      return null;
+    }
+  };
+
+  const userRole = getUserRole();
+  const canEdit = userRole === 'admin' || userRole === 'moderator';
+
   const token = localStorage.getItem('token');
   const axiosInstance = axios.create({
     headers: { Authorization: `Bearer ${token}` },
@@ -21,12 +35,10 @@ const OrderDetails = () => {
     const fetchOrder = async () => {
       setLoading(true);
       try {
-        const res = await axiosInstance.get(`/api/moderator/orders/${id}`);
+        const res = await axiosInstance.get(`/api/orders/${id}`);
         setOrder(res.data.order);
-        setError(null);
       } catch (e) {
         setError('Ошибка при загрузке заявки');
-        setOrder(null);
       } finally {
         setLoading(false);
       }
@@ -35,6 +47,7 @@ const OrderDetails = () => {
   }, [id]);
 
   const handleChange = (e) => {
+    if (!canEdit) return; // защита на случай, если поле вдруг активное
     const { name, value } = e.target;
     setOrder((prev) => ({ ...prev, [name]: value }));
   };
@@ -42,9 +55,9 @@ const OrderDetails = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await axiosInstance.patch(`/api/moderator/orders/${id}`, order);
+      await axiosInstance.patch(`/api/orders/${id}`, order);
       alert('Заявка сохранена');
-      navigate(-1);
+      navigate('/'); // например, вернуться на панель модератора
     } catch (e) {
       alert('Ошибка при сохранении');
     } finally {
@@ -52,93 +65,75 @@ const OrderDetails = () => {
     }
   };
 
-  if (loading) return <p className="loading">Загрузка...</p>;
-  if (error) return <p className="error">{error}</p>;
-  if (!order) return <p className="error">Заявка не найдена</p>;
+  if (loading) return <p>Загрузка...</p>;
+  if (error) return <p>{error}</p>;
+  if (!order) return <p>Заявка не найдена</p>;
 
   return (
-    <div className="order-details">
+    <div style={{ maxWidth: 600, margin: '20px auto' }}>
       <h1>Детали заявки #{order.id}</h1>
 
+      {/* Если можно редактировать — показываем input, иначе просто текст */}
       <label>
         Заголовок:
-        <input name="title" value={order.title || ''} onChange={handleChange} />
+        {canEdit ? (
+          <input name="title" value={order.title || ''} onChange={handleChange} />
+        ) : (
+          <p>{order.title || '-'}</p>
+        )}
       </label>
 
       <label>
         Категория:
-        <input name="category" value={order.category || ''} onChange={handleChange} />
-      </label>
-
-      <label>
-        Описание:
-        <textarea name="description" value={order.description || ''} onChange={handleChange} />
+        {canEdit ? (
+          <input name="category" value={order.category || ''} onChange={handleChange} />
+        ) : (
+          <p>{order.category || '-'}</p>
+        )}
       </label>
 
       <label>
         Бюджет:
-        <input name="budget" value={order.budget || ''} onChange={handleChange} />
-      </label>
-
-      <label>
-        Дедлайн:
-        <input
-          type="date"
-          name="deadline"
-          value={order.deadline ? order.deadline.substring(0, 10) : ''}
-          onChange={handleChange}
-        />
-      </label>
-
-      <label>
-        Регион:
-        <input name="region" value={order.region || ''} onChange={handleChange} />
-      </label>
-
-      <label>
-        Город:
-        <input name="city" value={order.city || ''} onChange={handleChange} />
-      </label>
-
-      <label>
-        Формат:
-        <input name="format" value={order.format || ''} onChange={handleChange} />
-      </label>
-
-      <label>
-        Тип:
-        <input name="type" value={order.type || ''} onChange={handleChange} />
-      </label>
-
-      <label>
-        Оплата:
-        <input name="payment" value={order.payment || ''} onChange={handleChange} />
-      </label>
-
-      <label>
-        Статус:
-        <input name="status" value={order.status || ''} onChange={handleChange} />
+        {canEdit ? (
+          <input name="budget" value={order.budget || ''} onChange={handleChange} />
+        ) : (
+          <p>{order.budget !== undefined ? order.budget : '-'}</p>
+        )}
       </label>
 
       <label>
         Статус модерации:
-        <select
-          name="moderation_status"
-          value={order.moderation_status || ''}
-          onChange={handleChange}
-        >
-          <option value="pending">Ожидает</option>
-          <option value="approved">Одобрена</option>
-          <option value="rejected">Отклонена</option>
-        </select>
+        {canEdit ? (
+          <select
+            name="moderation_status"
+            value={order.moderation_status || ''}
+            onChange={handleChange}
+          >
+            <option value="pending">Ожидает</option>
+            <option value="approved">Одобрена</option>
+            <option value="rejected">Отклонена</option>
+          </select>
+        ) : (
+          <p>{order.moderation_status || '-'}</p>
+        )}
       </label>
 
-      <div className="buttons">
-        <button onClick={handleSave} disabled={saving}>
-          {saving ? 'Сохраняем...' : 'Сохранить'}
-        </button>
-        <button onClick={() => navigate(-1)}>Назад</button>
-      </div>
+      {/* Добавь остальные поля по аналогии */}
+
+      {canEdit && (
+        <div style={{ marginTop: 20 }}>
+          <button onClick={handleSave} disabled={saving}>
+            {saving ? 'Сохраняем...' : 'Сохранить'}
+          </button>{' '}
+          <button onClick={() => navigate(-1)}>Назад</button>
+        </div>
+      )}
+
+      {!canEdit && (
+        <div style={{ marginTop: 20 }}>
+          <button onClick={() => navigate(-1)}>Назад</button>
+        </div>
+      )}
     </div>
   );
 };

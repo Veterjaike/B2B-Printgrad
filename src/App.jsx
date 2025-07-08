@@ -36,12 +36,13 @@ function App() {
             <Route path="profile" element={<Profile />} />
             <Route path="myorders" element={<MyOrders />} />
             <Route path="create-order" element={<CreateOrder />} />
+            <Route path="orders/:id" element={<OrderDetails />} />
           </Route>
 
           {/* 🔐 Только для admin/moderator */}
           <Route element={<AdminRoute />}>
             <Route path="admin" element={<AdminPanel />} />
-            <Route path="orders/:id" element={<OrderDetails />} />
+            
           </Route>
 
           <Route path="registration" element={<RegPage />} />
