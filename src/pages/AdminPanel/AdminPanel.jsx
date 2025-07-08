@@ -10,21 +10,17 @@ const AdminPanel = () => {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [loadingEditRequests, setLoadingEditRequests] = useState(false);
 
-  // Для редактирования пользователя
   const [editingUser, setEditingUser] = useState(null);
   const [editForm, setEditForm] = useState({ full_name: '', inn: '', role: '' });
   const [savingUser, setSavingUser] = useState(false);
 
-  // Поиск пользователей
   const [searchUserId, setSearchUserId] = useState('');
   const [allUsers, setAllUsers] = useState([]);
   const [loadingAllUsers, setLoadingAllUsers] = useState(false);
 
   const token = localStorage.getItem('token');
   const axiosInstance = axios.create({
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    headers: { Authorization: `Bearer ${token}` },
   });
 
   // Загрузка пользователей на модерации
@@ -45,7 +41,7 @@ const AdminPanel = () => {
   const fetchAllUsers = async () => {
     setLoadingAllUsers(true);
     try {
-      const res = await axiosInstance.get('/api/admin/users'); // <-- эндпоинт для всех пользователей
+      const res = await axiosInstance.get('/api/admin/users');
       setAllUsers(res.data.users || []);
     } catch (err) {
       console.error(err);
@@ -90,41 +86,33 @@ const AdminPanel = () => {
     fetchAllUsers();
   }, []);
 
-  // Одобрить пользователя
-  const approveUser = async (id) => {
+  // Получение полного профиля пользователя по ID
+  const fetchUserById = async (id) => {
     try {
-      await axiosInstance.patch(`/api/moderator/users/${id}/approve`);
-      fetchUsers();
-      fetchAllUsers();
+      const res = await axiosInstance.get(`/api/admin/users/${id}`);
+      return res.data.user;
     } catch (err) {
-      console.error(err);
+      console.error('Ошибка при загрузке пользователя', err);
+      return null;
     }
   };
 
-  // Удалить пользователя
-  const deleteUser = async (id) => {
-    if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return;
-    try {
-      await axiosInstance.delete(`/api/admin/users/${id}`);
-      fetchAllUsers();
-      fetchUsers();
-    } catch (err) {
-      console.error(err);
-      alert('Ошибка при удалении пользователя');
+  // Открыть модалку редактирования с полной информацией
+  const openEditUser = async (user) => {
+    const fullUser = await fetchUserById(user.id);
+    if (!fullUser) {
+      alert('Не удалось загрузить данные пользователя');
+      return;
     }
-  };
-
-  // Открыть модалку редактирования
-  const openEditUser = (user) => {
-    setEditingUser(user);
+    setEditingUser(fullUser);
     setEditForm({
-      full_name: user.full_name || '',
-      inn: user.inn || '',
-      role: user.role || '',
+      full_name: fullUser.full_name || '',
+      inn: fullUser.inn || '',
+      role: fullUser.role || '',
     });
   };
 
-  // Изменение в форме редактирования
+  // Обработка изменения в форме редактирования
   const handleEditChange = (e) => {
     const { name, value } = e.target;
     setEditForm((prev) => ({ ...prev, [name]: value }));
@@ -137,8 +125,8 @@ const AdminPanel = () => {
     try {
       await axiosInstance.patch(`/api/moderator/users/${editingUser.id}`, editForm);
       setEditingUser(null);
-      fetchUsers();
-      fetchAllUsers();
+      await fetchUsers();
+      await fetchAllUsers();
     } catch (err) {
       console.error(err);
       alert('Ошибка при сохранении данных пользователя');
@@ -147,35 +135,63 @@ const AdminPanel = () => {
     }
   };
 
-  // Закрыть модалку редактирования
+  // Закрыть модальное окно
   const closeEditModal = () => {
     setEditingUser(null);
   };
 
-  // Фильтрация пользователей по ID
-  const filteredUsers = allUsers.filter(user =>
-    user.id.toString().includes(searchUserId.trim())
-  );
+  // Фильтрация пользователей по ID и ФИО
+  const filteredUsers = allUsers.filter(user => {
+    const search = searchUserId.trim().toLowerCase();
+    return (
+      user.id.toString().includes(search) ||
+      (user.full_name && user.full_name.toLowerCase().includes(search))
+    );
+  });
+
+  // Одобрить пользователя
+  const approveUser = async (id) => {
+    try {
+      await axiosInstance.patch(`/api/moderator/users/${id}/approve`);
+      await fetchUsers();
+      await fetchAllUsers();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Удалить пользователя
+  const deleteUser = async (id) => {
+    if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return;
+    try {
+      await axiosInstance.delete(`/api/admin/users/${id}`);
+      await fetchAllUsers();
+      await fetchUsers();
+    } catch (err) {
+      console.error(err);
+      alert('Ошибка при удалении пользователя');
+    }
+  };
 
   // Одобрить заявку
   const approveOrder = async (id) => {
     try {
       await axiosInstance.patch(`/api/moderator/orders/${id}/approve`);
-      fetchOrders();
-      fetchEditRequests();
+      await fetchOrders();
+      await fetchEditRequests();
     } catch (err) {
       console.error(err);
     }
   };
 
   return (
-    <div className="admin-panel">
+    <div className="admin-panel" style={{ display: 'flex', gap: '20px' }}>
       {/* Левая боковая панель с пользователями и поиском */}
-      <aside>
+      <aside style={{ flexBasis: '350px', maxHeight: '90vh', overflowY: 'auto' }}>
         <h2 className="admin-subtitle">Все пользователи</h2>
         <input
           type="text"
-          placeholder="Поиск по ID"
+          placeholder="Поиск по ID или ФИО"
           value={searchUserId}
           onChange={(e) => setSearchUserId(e.target.value)}
           className="search-input"
@@ -211,8 +227,8 @@ const AdminPanel = () => {
         )}
       </aside>
 
-      {/* Основной контент (оставь без изменений) */}
-      <div>
+      {/* Основной контент */}
+      <div style={{ flexGrow: 1, overflowY: 'auto', maxHeight: '90vh' }}>
         {/* Пользователи на одобрении */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Пользователи, ожидающие одобрения</h2>
