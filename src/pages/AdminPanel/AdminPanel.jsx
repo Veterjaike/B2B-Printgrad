@@ -198,8 +198,7 @@ const AdminPanel = () => {
 
   return (
     <div className="admin-panel" style={{ display: 'flex', gap: '20px' }}>
-      {/* Левая боковая панель с пользователями и поиском */}
-      <aside style={{ flexBasis: '350px', maxHeight: '90vh', overflowY: 'auto' }}>
+      <aside style={{ flexBasis: '100%', maxHeight: '40vh', overflowY: 'auto' }}>
         <h2 className="admin-subtitle">Все пользователи</h2>
         <input
           type="text"
@@ -239,9 +238,7 @@ const AdminPanel = () => {
         )}
       </aside>
 
-      {/* Основной контент */}
       <div style={{ flexGrow: 1, overflowY: 'auto', maxHeight: '90vh' }}>
-        {/* Пользователи на одобрении */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Пользователи, ожидающие одобрения</h2>
           {loadingUsers ? (
@@ -277,7 +274,6 @@ const AdminPanel = () => {
           )}
         </section>
 
-        {/* Заявки */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Заявки на одобрение</h2>
           {loadingOrders ? (
@@ -323,7 +319,6 @@ const AdminPanel = () => {
           )}
         </section>
 
-        {/* Запросы на редактирование заявок */}
         <section className="admin-section">
           <h2 className="admin-subtitle">Запросы на изменение заявок</h2>
           {loadingEditRequests ? (

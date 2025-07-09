@@ -1,12 +1,11 @@
 .admin-panel {
-  max-width: 1000px;
+  max-width: 70%;
   margin: 0 auto;
   padding: 20px;
   font-family: Arial, sans-serif;
 
   display: flex;
   gap: 20px;
-  /* Чтобы не вылазило при маленькой ширине */
   flex-wrap: wrap;
 }
 
@@ -27,7 +26,6 @@
   box-sizing: border-box;
 }
 
-/* Стили для поиска */
 .search-input {
   width: 100%;
   padding: 6px 8px;
@@ -65,6 +63,7 @@
   border: 1px solid #ddd;
   padding: 8px;
   word-break: break-word;
+  align-content: center;
 }
 
 .admin-table th {
@@ -78,7 +77,8 @@
   padding: 6px 12px;
   cursor: pointer;
   border-radius: 4px;
-  margin-right: 8px;
+  width: 150px;
+  height: 45px;
 }
 
 .edit-btn {
@@ -88,6 +88,8 @@
   padding: 6px 12px;
   cursor: pointer;
   border-radius: 4px;
+  width: 150px;
+  height: 45px;
 }
 
 .delete-btn {
@@ -98,6 +100,8 @@
   cursor: pointer;
   border-radius: 4px;
   margin-left: 6px;
+  width: 150px;
+  height: 45px;
 }
 
 .approve-btn:hover {
@@ -112,7 +116,6 @@
   background-color: #d32f2f;
 }
 
-/* Модальное окно */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -164,7 +167,6 @@
   cursor: pointer;
 }
 
-/* Адаптивность */
 
 @media (max-width: 768px) {
   .admin-panel {
