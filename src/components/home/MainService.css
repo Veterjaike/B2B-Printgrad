@@ -11,7 +11,7 @@
 .main-content__wrapper {
     align-items: center;
     display: flex;
-    gap: 20px;
+    gap: 40px;
     margin: 0 0 60px 0;
 }
 
@@ -22,12 +22,14 @@
 }
 
 .main-content__left-heading {
+    font-weight: 700;
     text-align: left;
-    font-size: 40px;
+    font-size: 3rem;
     margin: 0 0 30px 0;
     padding: 0;
     text-transform: uppercase;
-    line-height: 45px;
+    line-height: 70px;
+    letter-spacing: 0.05em;
     transition: transform 1s;
 }
 
@@ -54,7 +56,8 @@
 .main-content__left-text {
     text-align: center;
     text-align: left;
-    font-size: 20px;
+    font-size: 22px;
+    letter-spacing: 0.01em;
     line-height: 25px;
     transition: transform 1s;
 }
@@ -80,19 +83,18 @@
 }
 
 .main-content__link {
+    font-weight: 700;
     text-align: center;
-    font-size: 16px;
+    font-size: 24px;
     text-transform: uppercase;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 300px;
-    height: 40px;
     margin: 0 auto;
-    padding: 10px;
+    padding: 20px 50px;
     background-color: #092455;
     color: #ffffff;
-    border-radius: 15px;
+    border-radius: 25px;
     border: none;
     transition: transform 0.5s;
 }

@@ -25,6 +25,7 @@
 
 
 .steps__wrapper-text {
+    font-family: "VK Sans Display", "Arial", sans-serif;
     font-size: 20px;
     width: 120px;
     text-align: center;
@@ -37,19 +38,20 @@
 
 .steps__wrapper-arrow {
     width: 220px;
+    height: 80px;
     position: absolute;
-    left: 95%;
+    left: 100%;
     opacity: 0;
     transform: translateX(-50%) scale(0.5);
     transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
 .steps__wrapper-arrow.ArrowDown {
-    bottom: -70px;
+    bottom: -100px;
 }
 
 .steps__wrapper-arrow.ArrowUp {
-    top: -70px;
+    top: -100px;
 }
 
 .steps__wrapper-arrow.visible {
@@ -70,6 +72,7 @@
 }
 
 .steps__number {
+    font-family: "VK Sans Display", "Arial", sans-serif;
     font-size: 48px;
     font-weight: bold;
     color: #000;

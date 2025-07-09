@@ -25,8 +25,39 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'VK Sans Display';
+  src: url('../src/assets/fonts/VKSansDisplay-Regular.woff2') format('woff2'),
+    url('../src/assets/fonts/VKSansDisplay-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'VK Sans Display';
+  src: url('../src/assets/fonts/VKSansDisplay-Medium.woff2') format('woff2'),
+    url('../src/assets/fonts/VKSansDisplay-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'VK Sans Display';
+  src: url('../src/assets/fonts/VKSansDisplay-Bold.woff2') format('woff2'),
+    url('../src/assets/fonts/VKSansDisplay-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
-  font-family: Montserrat, Arial, sans-serif;
+  font-family: "VK Sans Display", "Arial", sans-serif;
+}
+
+main {
+  min-height: 700px;
 }
 
 :root {

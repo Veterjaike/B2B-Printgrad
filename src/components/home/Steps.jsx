@@ -12,7 +12,7 @@ const StepBlock = ({ text, arrow, isVisible, delay, number }) => {
             {arrow && (
                 <img
                     className={`steps__wrapper-arrow ${arrow}`}
-                    src={`/images/${arrow}.png`}
+                    src={`/images/${arrow}.webp`}
                     alt="arrow"
                     style={{
                         opacity: isVisible ? 1 : 0,
