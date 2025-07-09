@@ -1,20 +1,27 @@
 .orders {
   padding: 20px;
-  background: #f5f7fa;
+  background: #fbfeff;
   min-height: 100vh;
-  color: #333;
+  color: #000000;
 }
 
 .orders-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   gap: 30px;
 }
 
+.category-filter-heading {
+  display: block;
+  font-size: 20px;
+  margin: 0 auto 20px;
+  text-align: center;
+}
+
 .orders-filter-container {
-  flex: 0 0 280px;
-  background: #fff;
+  width: 300px;
+  background: #f1faff;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
@@ -26,14 +33,15 @@
 .orders-filter {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 20px;
 }
 
 .filter-group label {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   margin-bottom: 12px;
-  color: #222;
+  color: #000000;
 }
 
 .categories-list {
@@ -55,8 +63,8 @@
 
 .category-item input[type="checkbox"] {
   cursor: pointer;
-  width: 18px;
-  height: 18px;
+  width: 14px;
+  height: 14px;
 }
 
 #region-select {
@@ -64,7 +72,7 @@
   padding: 8px 12px;
   border-radius: 6px;
   border: 1px solid #bbb;
-  font-size: 1rem;
+  font-size: 0.8rem;
   background-color: #fff;
   cursor: pointer;
   transition: border-color 0.3s;

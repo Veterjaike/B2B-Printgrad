@@ -26,7 +26,7 @@ function OrdersFilter({ selectedCategories, onFilterChange, selectedRegion, onRe
     return (
         <div className="orders-filter">
             <div className="filter-group categories-filter">
-                <label>Категории:</label>
+                <span className='category-filter-heading'>Категории:</span>
                 <div className="categories-list">
                     {categories.map(cat => (
                         <label key={cat} className="category-item">

@@ -55,14 +55,12 @@ export const Profile = () => {
 
     return (
         <div className="profile-new-layout">
-            {/* Левая колонка */}
             <div className="profile-left">
                 <UserCard user={currentUser}>
                     <Avatar name={currentUser.full_name} avatar={avatar} onChange={handleAvatarChange} />
                 </UserCard>
                 <ChatBlock />
             </div>
-            {/* Правая колонка */}
             <div className="profile-right">
                 <OrdersBlock count={5} />
                 <MarketBlock count={12} />

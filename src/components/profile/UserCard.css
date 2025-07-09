@@ -1,31 +1,34 @@
 .user-card {
-  background: #f7f7f7;
-  padding: 20px;
+  width: 100%;
+  background: #e9f7ff;
+  padding: 20px 50px;
   border-radius: 8px;
-  max-width: 400px;
-  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  max-width: 570px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   margin: 0 auto;
 }
 
 .user-card h3 {
+  text-align: center;
   margin-top: 0;
   margin-bottom: 15px;
-  color: #333;
+  color: #000000;
+  font-size: 30px;
 }
 
 .user-card p {
-  margin: 6px 0;
+  text-align: left;
+  margin: 0 0 10px 0;
   font-size: 16px;
 }
 
+.user-card p strong {
+  font-size: 18px;
+  color: #2600ff;
+}
+
 .logout-btn {
-  margin-top: 15px;
-  padding: 8px 16px;
   background-color: #ff4d4f;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
 }
 
 .logout-btn:hover {
@@ -35,23 +38,28 @@
 .buttons-row {
   margin-top: 15px;
   display: flex;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
 }
 
 .logout-btn,
 .admin-panel-btn {
+  width: 200px;
+  height: 50px;
   padding: 8px 15px;
   font-weight: 600;
+  font-size: 18px;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
   color: white;
-  background-color: #d9534f; /* красный для выхода */
   transition: background-color 0.3s;
+  margin-top: 20px;
 }
 
 .admin-panel-btn {
-  background-color: #0275d8; /* синий для админ панели */
+  background-color: #0275d8;
 }
 
 .logout-btn:hover {
@@ -60,4 +68,26 @@
 
 .admin-panel-btn:hover {
   background-color: #025aa5;
+}
+
+@media (max-width: 1180px) {
+  .user-card h3 {
+    font-size: 16px;
+  }
+
+  .user-card p {
+    text-align: left;
+    margin: 0 0 10px 0;
+    font-size: 16px;
+  }
+
+  .user-card p strong {
+    font-size: 14px;
+  }
+
+  .logout-btn,
+  .admin-panel-btn {
+    height: 50px;
+    font-size: 16px;
+  }
 }
