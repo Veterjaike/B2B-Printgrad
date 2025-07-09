@@ -47,7 +47,6 @@ export default function CreateOrder() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Хук для закрытия подсказок по клику вне поля
   const regionRef = useRef(null);
   const cityRef = useRef(null);
 
@@ -84,14 +83,12 @@ export default function CreateOrder() {
       const data = await response.json();
 
       if (type === 'region') {
-        // Отфильтруем уникальные регионы из подсказок
         const regionsSet = new Set();
         const regions = data.suggestions
           .map(item => item.data.region)
           .filter(r => r && !regionsSet.has(r) && regionsSet.add(r));
         setRegionSuggestions(regions);
       } else if (type === 'city') {
-        // Фильтруем города, учитывая Москву:
         const cityItems = data.suggestions.filter(item => {
           if (!(item.data.city || item.data.settlement)) return false;
 
@@ -102,7 +99,6 @@ export default function CreateOrder() {
           }
         });
 
-        // Уникальные города
         const citiesSet = new Set();
         const cities = cityItems
           .map(item => item.data.city || item.data.settlement)
@@ -123,7 +119,6 @@ export default function CreateOrder() {
     if (name === 'region') {
       setShowRegionSuggestions(true);
       fetchSuggestions(value, 'region');
-      // При смене региона очищаем город
       setFormData(prev => ({ ...prev, city: '' }));
       setCitySuggestions([]);
     } else if (name === 'city') {

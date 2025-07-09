@@ -19,7 +19,7 @@ function parseJwt(token) {
 }
 
 export default function Header() {
-  const token = localStorage.getItem('token'); // Замени, если у тебя другой ключ для токена
+  const token = localStorage.getItem('token');
   const user = token ? parseJwt(token) : null;
 
   return (
@@ -36,14 +36,14 @@ export default function Header() {
             />
           </a>
           <nav className='header__nav'>
-            <Link className='header__nav-link btn' to="/" >Главная</Link>
-            <Link className='header__nav-link btn' to="/orders" >Все заказы</Link>
-            <Link className='header__nav-link btn' to="/myorders" >Мои заказы</Link>
+            <Link className='header__nav-link btn' to="/">Главная</Link>
+            <Link className='header__nav-link btn' to="/orders">Все заказы</Link>
+            <Link className='header__nav-link btn' to="/myorders">Мои заказы</Link>
           </nav>
         </div>
 
         <div className="header__right">
-          {user?.role === 'заказчик' && (
+          {['заказчик', 'moderator', 'admin'].includes(user?.role) && (
             <Link className='header__nav-create-link btn' to="/create-order">
               Создать заказ
             </Link>
