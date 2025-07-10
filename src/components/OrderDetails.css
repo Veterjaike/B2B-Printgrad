@@ -1,107 +1,224 @@
-/* Основной контейнер */
-.order-details-container {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 30px 40px;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+/* Фоновый слой всей страницы */
+body, html, #root {
+  margin: 0; padding: 0; height: 100%;
+  background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 100%);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #2c3e50;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Заголовок */
-.order-details-container h1 {
-  font-size: 2.6rem;
-  font-weight: 700;
-  text-align: center;
-  color: #34495e;
-  margin-bottom: 30px;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
+/* Контейнер всей страницы заказа */
+.order-details-container {
+  max-width: 1100px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 48px 36px 72px;
+  background: #ffffffee;
+  border-radius: 24px;
+  box-shadow: 0 20px 48px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
   user-select: none;
 }
 
-/* Карточка полей заявки */
-.order-details-card {
-  background: #f9fafb;
-  border-radius: 12px;
-  padding: 25px 30px;
-  margin-bottom: 25px;
-  box-shadow: inset 0 0 12px #e1e8f0;
-  transition: background-color 0.3s ease;
-}
-
-.order-details-card:hover {
-  background: #eef4fb;
-}
-
-/* Названия полей */
-.order-details-label {
-  font-weight: 600;
-  font-size: 1.1rem;
+/* Заголовок */
+.order-details-container > h1 {
+  margin: 0 auto;
+  font-size: 3.2rem;
+  font-weight: 800;
+  letter-spacing: 2px;
   color: #34495e;
-  margin-bottom: 6px;
   user-select: text;
+  text-align: center;
 }
 
-/* Текстовое значение поля (вместо input) */
-.order-details-value {
-  font-size: 1.15rem;
-  line-height: 1.5;
-  color: #2c3e50;
-  padding: 8px 12px;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 3px 6px rgb(0 0 0 / 0.05);
-  user-select: text;
-  white-space: pre-wrap;
-  min-height: 42px;
-  cursor: default;
+/* Сетка для полей заказа */
+.order-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+  gap: 28px 32px;
 }
 
-/* Бюджет отдельным блоком с акцентом */
-.order-details-budget {
+/* Лейблы */
+label {
+  display: flex;
+  flex-direction: column;
   font-weight: 700;
-  font-size: 1.6rem;
-  color: #27ae60;
-  margin-top: 6px;
+  font-size: 1.15rem;
+  color: #34495e;
   user-select: text;
 }
 
-/* Описание с отступом */
-.order-details-description {
-  margin-top: 10px;
-  white-space: pre-line;
+/* Общий стиль для input, select и textarea */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  margin-top: 8px;
+  padding: 14px 18px;
+  font-size: 1.1rem;
+  border: 2.5px solid #2980b9;
+  border-radius: 14px;
+  background-color: #f9fbfd;
+  color: #2c3e50;
+  box-shadow: inset 0 2px 10px rgb(0 0 0 / 0.06);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  resize: vertical;
+  user-select: text;
+}
+
+/* Стили при фокусе */
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #1b4f72;
+  box-shadow: 0 0 12px rgba(27,79,114,0.8);
+}
+
+/* Заблокированные поля выглядят как текст */
+input[disabled],
+select[disabled],
+textarea[disabled] {
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #2c3e50;
+  font-weight: 600;
+  cursor: default;
+  padding-left: 0;
+  user-select: text;
+}
+
+/* Автокомплит список подсказок */
+.autocomplete {
+  position: relative;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 180px;
+  overflow-y: auto;
+  background: white;
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+  z-index: 1200;
+  margin-top: 4px;
+  user-select: none;
+  padding: 0;
+  list-style: none;
+}
+
+.suggestions-list li {
+  padding: 10px 18px;
+  cursor: pointer;
   font-size: 1rem;
   color: #34495e;
+  transition: background-color 0.22s ease;
 }
 
-/* Блок кнопок */
+.suggestions-list li:hover {
+  background-color: #2980b9;
+  color: white;
+}
+
+/* Блок запроса редактирования */
+.edit-request-section,
+.edit-request-info {
+  background: #d6eaf8;
+  border-radius: 18px;
+  padding: 24px 28px;
+  box-shadow: inset 0 3px 12px rgb(41 128 185 / 0.25);
+  user-select: text;
+}
+
+.edit-request-section h3,
+.edit-request-info h3 {
+  margin-top: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1b4f72;
+  user-select: text;
+}
+
+.edit-request-section textarea {
+  margin-top: 14px;
+  min-height: 80px;
+  border-radius: 14px;
+  border: 2px solid #2980b9;
+  font-size: 1.1rem;
+  padding: 12px 16px;
+  resize: vertical;
+  user-select: text;
+  transition: border-color 0.3s ease;
+}
+
+.edit-request-section textarea:focus {
+  border-color: #1b4f72;
+  box-shadow: 0 0 10px rgba(27,79,114,0.8);
+}
+
+/* Кнопка запроса */
+.edit-request-section button {
+  margin-top: 16px;
+  background-color: #2980b9;
+  color: white;
+  border-radius: 14px;
+  padding: 14px 28px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-shadow: 0 8px 22px rgba(41,128,185,0.4);
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  user-select: none;
+}
+
+.edit-request-section button:hover:not(:disabled) {
+  background-color: #1b4f72;
+}
+
+.edit-request-section button:disabled {
+  background-color: #a0bcd4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Кнопки управления внизу */
 .order-details-buttons {
   display: flex;
   justify-content: center;
-  gap: 16px;
-  margin-top: 40px;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-top: 12px;
 }
 
 .order-details-buttons button {
   background-color: #2980b9;
-  color: #fff;
-  font-weight: 600;
-  padding: 12px 26px;
+  color: white;
+  padding: 14px 38px;
+  font-weight: 700;
+  font-size: 1.2rem;
+  border-radius: 18px;
   border: none;
-  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(41,128,185,0.45);
   cursor: pointer;
-  font-size: 1.1rem;
-  transition: background-color 0.25s ease;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
   user-select: none;
-  box-shadow: 0 6px 15px rgb(41 128 185 / 0.35);
+  min-width: 140px;
 }
 
 .order-details-buttons button:hover:not(:disabled) {
-  background-color: #1c5980;
-  box-shadow: 0 8px 20px rgb(28 89 128 / 0.5);
+  background-color: #1b4f72;
+  box-shadow: 0 14px 36px rgba(27,79,114,0.7);
 }
 
 .order-details-buttons button:disabled {
@@ -110,89 +227,88 @@
   box-shadow: none;
 }
 
-/* Модальное окно */
+/* Модальное окно отклика */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(33, 44, 64, 0.7);
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(41, 128, 185, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1100;
+  z-index: 1300;
+  user-select: none;
 }
 
 .modal-content {
-  background: #fff;
-  padding: 28px 30px;
-  width: 95%;
-  max-width: 420px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgb(0 0 0 / 0.15);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #2c3e50;
+  background: white;
+  width: 100%;
+  max-width: 480px;
+  padding: 32px 36px;
+  border-radius: 22px;
+  box-shadow: 0 22px 56px rgba(0,0,0,0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  user-select: text;
 }
 
 .modal-content h3 {
-  margin-top: 0;
-  margin-bottom: 16px;
-  font-size: 1.4rem;
+  margin: 0;
+  font-size: 1.6rem;
   font-weight: 700;
-  user-select: none;
+  color: #2980b9;
 }
 
 .modal-content textarea {
-  width: 100%;
+  font-size: 1.15rem;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: 2px solid #d1d9e6;
   resize: vertical;
-  min-height: 100px;
-  font-size: 1rem;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1.8px solid #d1d9e6;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-shadow: inset 0 3px 12px rgb(0 0 0 / 0.08);
   transition: border-color 0.3s ease;
-  box-shadow: inset 0 2px 6px rgb(0 0 0 / 0.06);
 }
 
 .modal-content textarea:focus {
-  outline: none;
   border-color: #2980b9;
-  box-shadow: 0 0 8px rgb(41 128 185 / 0.5);
+  box-shadow: 0 0 12px rgba(41,128,185,0.6);
+  outline: none;
 }
 
 .modal-buttons {
-  margin-top: 20px;
   display: flex;
   justify-content: flex-end;
-  gap: 14px;
+  gap: 18px;
 }
 
 .modal-buttons button {
-  padding: 10px 18px;
-  font-size: 1rem;
-  border-radius: 8px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
+  padding: 12px 32px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(41,128,185,0.4);
   user-select: none;
-  box-shadow: 0 5px 15px rgb(41 128 185 / 0.3);
-  transition: background-color 0.25s ease;
 }
 
 .modal-buttons button:first-child {
   background-color: #27ae60;
   color: white;
+  box-shadow: 0 8px 20px rgba(39,174,96,0.5);
+  border: none;
+  cursor: pointer;
 }
 
 .modal-buttons button:first-child:hover:not(:disabled) {
   background-color: #1e8449;
+  box-shadow: 0 10px 25px rgba(30,132,73,0.7);
 }
 
 .modal-buttons button:last-child {
   background-color: #bdc3c7;
   color: #2c3e50;
+  border: none;
+  cursor: pointer;
+  box-shadow: none;
 }
 
 .modal-buttons button:last-child:hover:not(:disabled) {
@@ -205,54 +321,35 @@
   box-shadow: none;
 }
 
-/* Скрываем бордеры для input, textarea, если disabled, чтобы не выглядеть как форма */
-input[disabled], textarea[disabled] {
-  border: none !important;
-  background-color: transparent !important;
-  color: #2c3e50 !important;
-  font-weight: 600;
-  cursor: default;
-  box-shadow: none !important;
+/* Отступы снизу страницы */
+.order-details-container {
+  padding-bottom: 72px;
 }
 
-/* Убираем подсветку фокуса для disabled */
-input[disabled]:focus, textarea[disabled]:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-/* Стили для элементов формы в режиме редактирования */
-/* Если canEdit, показываем inputs с рамками */
-input:not([disabled]),
-textarea:not([disabled]) {
-  background-color: #fff;
-  border: 1.5px solid #2980b9;
-  font-weight: 600;
-  transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-input:not([disabled]):focus,
-textarea:not([disabled]):focus {
-  box-shadow: 0 0 10px rgb(41 128 185 / 0.7);
-  border-color: #1c5980;
-}
-
-/* Лэйблы - отступ снизу */
-label {
-  display: block;
-  margin-bottom: 14px;
-}
-
-/* Для описания */
-.description-block {
-  white-space: pre-wrap;
-  padding: 14px 12px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgb(0 0 0 / 0.06);
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #2c3e50;
-  margin-top: 6px;
+/* Подсказки debug */
+.order-details-container > div[style*="gray"] p {
+  margin: 3px 0;
+  font-size: 0.9rem;
+  color: #7f8c8d;
   user-select: text;
+}
+
+/* Адаптив для маленьких экранов */
+@media (max-width: 620px) {
+  .order-details-container {
+    padding: 24px 20px 48px;
+    border-radius: 18px;
+  }
+  .order-details-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .order-details-buttons {
+    flex-direction: column;
+    gap: 14px;
+  }
+  .order-details-buttons button {
+    width: 100%;
+    min-width: unset;
+  }
 }
