@@ -26,11 +26,6 @@ const OrderDetails = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
 
-  const [regionSuggestions, setRegionSuggestions] = useState([]);
-  const [citySuggestions, setCitySuggestions] = useState([]);
-  const [showRegionSuggestions, setShowRegionSuggestions] = useState(false);
-  const [showCitySuggestions, setShowCitySuggestions] = useState(false);
-
   const [editRequestComment, setEditRequestComment] = useState('');
   const [sendingEditRequest, setSendingEditRequest] = useState(false);
   const [editRequestSent, setEditRequestSent] = useState(false);
@@ -38,9 +33,6 @@ const OrderDetails = () => {
   const [showRespondModal, setShowRespondModal] = useState(false);
   const [responseMessage, setResponseMessage] = useState('');
   const [sendingResponse, setSendingResponse] = useState(false);
-
-  const regionRef = useRef(null);
-  const cityRef = useRef(null);
 
   const token = localStorage.getItem('token');
 
@@ -67,7 +59,6 @@ const OrderDetails = () => {
   const userRole = getUserRole();
   const userId = getUserId();
 
-  // Права
   const canEdit = userRole === 'admin' || userRole === 'moderator';
   const canRespond = userRole === 'исполнитель';
   const isOwner = order?.user_id === userId;
@@ -98,87 +89,10 @@ const OrderDetails = () => {
     fetchOrder();
   }, [id]);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (regionRef.current && !regionRef.current.contains(e.target)) {
-        setShowRegionSuggestions(false);
-      }
-      if (cityRef.current && !cityRef.current.contains(e.target)) {
-        setShowCitySuggestions(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const fetchSuggestions = async (query, type) => {
-    if (!query) {
-      type === 'region' ? setRegionSuggestions([]) : setCitySuggestions([]);
-      return;
-    }
-
-    try {
-      const res = await fetch('https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          Authorization: 'Token ' + DADATA_TOKEN,
-        },
-        body: JSON.stringify({ query }),
-      });
-
-      const data = await res.json();
-
-      if (type === 'region') {
-        const regionsSet = new Set();
-        const regions = data.suggestions
-          .map(i => i.data.region)
-          .filter(r => r && !regionsSet.has(r) && regionsSet.add(r));
-        setRegionSuggestions(regions);
-      } else {
-        const filtered = data.suggestions.filter(i => {
-          const reg = i.data.region;
-          const city = i.data.city || i.data.settlement;
-          if (!city) return false;
-          if (order.region === 'Москва') return reg === 'Москва' || city === 'Москва';
-          return reg === order.region;
-        });
-        const citiesSet = new Set();
-        const cities = filtered
-          .map(i => i.data.city || i.data.settlement)
-          .filter(c => c && !citiesSet.has(c) && citiesSet.add(c));
-        setCitySuggestions(cities);
-      }
-    } catch (err) {
-      console.error('Ошибка Dadata:', err);
-    }
-  };
-
   const handleChange = (e) => {
     if (!canEdit) return;
     const { name, value } = e.target;
     setOrder((prev) => ({ ...prev, [name]: value }));
-    if (name === 'region') {
-      setShowRegionSuggestions(true);
-      fetchSuggestions(value, 'region');
-      setOrder((prev) => ({ ...prev, city: '' }));
-    } else if (name === 'city') {
-      setShowCitySuggestions(true);
-      fetchSuggestions(value, 'city');
-    }
-  };
-
-  const handleRegionSelect = (region) => {
-    setOrder((prev) => ({ ...prev, region, city: '' }));
-    setRegionSuggestions([]);
-    setShowRegionSuggestions(false);
-  };
-
-  const handleCitySelect = (city) => {
-    setOrder((prev) => ({ ...prev, city }));
-    setCitySuggestions([]);
-    setShowCitySuggestions(false);
   };
 
   const handleSave = async () => {
@@ -194,12 +108,10 @@ const OrderDetails = () => {
     }
   };
 
-  // Открытие модалки отклика
   const handleRespond = () => {
     setShowRespondModal(true);
   };
 
-  // Отправка отклика с сообщением
   const handleSendResponse = async () => {
     if (!responseMessage.trim()) {
       alert('Введите сообщение');
@@ -236,7 +148,6 @@ const OrderDetails = () => {
   if (error) return <p>{error}</p>;
   if (!order) return <p>Заявка не найдена</p>;
 
-  // Модалка отклика
   const RespondModal = () => (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -263,139 +174,71 @@ const OrderDetails = () => {
   return (
     <div className="order-details-container">
       <h1>Заявка #{order.id}</h1>
-      <div className="order-details-grid">
-        <label>
-          Заголовок:
-          <input type="text" name="title" value={order.title || ''} onChange={handleChange} disabled={!canEdit} />
-        </label>
 
-        <label>
-          Категория:
-          <select name="category" value={order.category || ''} onChange={handleChange} disabled={!canEdit}>
-            <option value="">Выберите категорию</option>
-            {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
-          </select>
-        </label>
+      <label>
+        Заголовок:
+        <input
+          type="text"
+          name="title"
+          value={order.title || ''}
+          onChange={handleChange}
+          disabled={!canEdit}
+        />
+      </label>
 
-        <label>
-          Бюджет:
-          <input type="number" name="budget" value={order.budget || ''} onChange={handleChange} disabled={!canEdit} />
-        </label>
+      <label>
+        Бюджет:
+        <input
+          type="number"
+          name="budget"
+          value={order.budget || ''}
+          onChange={handleChange}
+          disabled={!canEdit}
+        />
+      </label>
 
-        <label>
-          Статус модерации:
-          <select name="moderation_status" value={order.moderation_status || ''} onChange={handleChange} disabled={!canEdit}>
-            <option value="pending">Ожидает</option>
-            <option value="approved">Одобрена</option>
-            <option value="rejected">Отклонена</option>
-          </select>
-        </label>
+      <label>
+        Описание:
+        <textarea
+          name="description"
+          rows={4}
+          value={order.description || ''}
+          onChange={handleChange}
+          disabled={!canEdit}
+        />
+      </label>
 
-        <label>
-          Описание:
-          <textarea name="description" rows={4} value={order.description || ''} onChange={handleChange} disabled={!canEdit} />
-        </label>
-
-        <label>
-          Дедлайн:
-          <input type="date" name="deadline" value={order.deadline?.slice(0, 10) || ''} onChange={handleChange} disabled={!canEdit} />
-        </label>
-
-        <div className="autocomplete" ref={regionRef}>
-          <label>Регион:
-            <input type="text" name="region" value={order.region || ''} onChange={handleChange} onFocus={() => setShowRegionSuggestions(true)} disabled={!canEdit} />
-          </label>
-          {showRegionSuggestions && regionSuggestions.length > 0 && (
-            <ul className="suggestions-list">
-              {regionSuggestions.map(region => (
-                <li key={region} onClick={() => handleRegionSelect(region)}>{region}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <div className="autocomplete" ref={cityRef}>
-          <label>Город:
-            <input type="text" name="city" value={order.city || ''} onChange={handleChange} onFocus={() => setShowCitySuggestions(true)} disabled={!canEdit || !order.region} placeholder={order.region ? '' : 'Сначала выберите регион'} />
-          </label>
-          {showCitySuggestions && citySuggestions.length > 0 && (
-            <ul className="suggestions-list">
-              {citySuggestions.map(city => (
-                <li key={city} onClick={() => handleCitySelect(city)}>{city}</li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <label>
-          Формат:
-          <select name="format" value={order.format || ''} onChange={handleChange} disabled={!canEdit}>
-            <option value="">Выберите формат</option>
-            <option value="Удаленно">Удаленно</option>
-            <option value="На месте">На месте</option>
-          </select>
-        </label>
-
-        <label>
-          Тип:
-          <select name="type" value={order.type || ''} onChange={handleChange} disabled={!canEdit}>
-            <option value="">Выберите тип</option>
-            <option value="Разовая">Разовая</option>
-            <option value="Долгосрочная">Долгосрочная</option>
-          </select>
-        </label>
-
-        <label>
-          Оплата:
-          <select name="payment" value={order.payment || ''} onChange={handleChange} disabled={!canEdit}>
-            <option value="">Выберите способ оплаты</option>
-            <option value="Безналичный">Безналичный</option>
-            <option value="Наличный">Наличный</option>
-          </select>
-        </label>
-      </div>
-
-      {/* Для владельца заявки — блок запроса на редактирование */}
-      {!canEdit && isOwner && !editRequestSent && (
-        <div className="edit-request-section">
-          <h3>Запросить изменение заявки</h3>
-          <textarea
-            placeholder="Опишите, что хотите изменить"
-            value={editRequestComment}
-            onChange={(e) => setEditRequestComment(e.target.value)}
-            rows={3}
-          />
-          <button
-            onClick={handleSendEditRequest}
-            disabled={sendingEditRequest || !editRequestComment.trim()}
-          >
-            {sendingEditRequest ? 'Отправляем...' : 'Отправить запрос'}
-          </button>
-        </div>
-      )}
-
-      {/* Если уже отправлен запрос */}
-      {!canEdit && isOwner && editRequestSent && (
-        <div className="edit-request-info">
-          <h3>Запрос на изменение отправлен модератору</h3>
-          <p><b>Комментарий:</b> {editRequestComment}</p>
-        </div>
-      )}
-
+      {/* Блок кнопок */}
       <div className="order-details-buttons">
         {canEdit && (
           <>
-            <button onClick={handleSave} disabled={saving}>{saving ? 'Сохраняем...' : 'Сохранить'}</button>
+            <button onClick={handleSave} disabled={saving}>
+              {saving ? 'Сохраняем...' : 'Сохранить'}
+            </button>
             <button onClick={() => navigate(-1)}>Закрыть</button>
           </>
         )}
-        {!canEdit && canRespond && (
+
+        {!canEdit && userRole === 'исполнитель' && (
           <>
-            <button onClick={handleRespond}>Откликнуться</button>
+            <button onClick={handleRespond} disabled={sendingResponse}>
+              Откликнуться
+            </button>
             <button onClick={() => navigate(-1)}>Закрыть</button>
           </>
         )}
-        {!canEdit && !canRespond && <button onClick={() => navigate(-1)}>Закрыть</button>}
+
+        {!canEdit && userRole !== 'исполнитель' && (
+          <button onClick={() => navigate(-1)}>Закрыть</button>
+        )}
+
+        {/* DEBUG-информация */}
+        <div style={{ marginTop: '1rem', fontSize: '0.85em', color: 'gray' }}>
+          <p>Роль: {userRole || 'не определена'}</p>
+          <p>canEdit: {String(canEdit)}</p>
+          <p>canRespond: {String(canRespond)}</p>
+          <p>isOwner: {String(isOwner)}</p>
+        </div>
       </div>
 
       {/* Модалка отклика */}
