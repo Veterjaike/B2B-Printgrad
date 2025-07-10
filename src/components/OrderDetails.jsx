@@ -1,9 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './OrderDetails.css';
-
-const DADATA_TOKEN = '5e46733e57b90c869ea439c02ecfb79dda4e6d3e';
 
 const categories = [
   'Серверы и серверные ОС',
@@ -175,40 +173,94 @@ const OrderDetails = () => {
     <div className="order-details-container">
       <h1>Заявка #{order.id}</h1>
 
-      <label>
-        Заголовок:
-        <input
-          type="text"
-          name="title"
-          value={order.title || ''}
-          onChange={handleChange}
-          disabled={!canEdit}
-        />
-      </label>
+      {/* Заголовок */}
+      <div className="order-details-card">
+        <div className="order-details-label">Заголовок</div>
+        {canEdit ? (
+          <input
+            type="text"
+            name="title"
+            value={order.title || ''}
+            onChange={handleChange}
+          />
+        ) : (
+          <div className="order-details-value">{order.title || '-'}</div>
+        )}
+      </div>
 
-      <label>
-        Бюджет:
-        <input
-          type="number"
-          name="budget"
-          value={order.budget || ''}
-          onChange={handleChange}
-          disabled={!canEdit}
-        />
-      </label>
+      {/* Бюджет */}
+      <div className="order-details-card">
+        <div className="order-details-label">Бюджет</div>
+        {canEdit ? (
+          <input
+            type="number"
+            name="budget"
+            value={order.budget || ''}
+            onChange={handleChange}
+          />
+        ) : (
+          <div className="order-details-budget">
+            {order.budget ? `${order.budget} ₽` : '-'}
+          </div>
+        )}
+      </div>
 
-      <label>
-        Описание:
-        <textarea
-          name="description"
-          rows={4}
-          value={order.description || ''}
-          onChange={handleChange}
-          disabled={!canEdit}
-        />
-      </label>
+      {/* Описание */}
+      <div className="order-details-card">
+        <div className="order-details-label">Описание</div>
+        {canEdit ? (
+          <textarea
+            name="description"
+            rows={6}
+            value={order.description || ''}
+            onChange={handleChange}
+          />
+        ) : (
+          <div className="description-block">{order.description || '-'}</div>
+        )}
+      </div>
 
-      {/* Блок кнопок */}
+      {/* Запрос на редактирование (только если заказчик и еще не отправлен) */}
+      {isOwner && !editRequestSent && (
+        <div className="order-details-card">
+          <div className="order-details-label" style={{ marginBottom: 8 }}>
+            Запросить редактирование заявки
+          </div>
+          <textarea
+            rows={3}
+            placeholder="Комментарий к запросу"
+            value={editRequestComment}
+            onChange={(e) => setEditRequestComment(e.target.value)}
+            disabled={sendingEditRequest}
+          />
+          <button
+            onClick={handleSendEditRequest}
+            disabled={sendingEditRequest || !editRequestComment.trim()}
+            style={{ marginTop: 10 }}
+          >
+            {sendingEditRequest ? 'Отправляем...' : 'Отправить запрос'}
+          </button>
+        </div>
+      )}
+
+      {/* Информация о том, что запрос отправлен */}
+      {editRequestSent && (
+        <div
+          className="order-details-card"
+          style={{
+            border: '2px solid #27ae60',
+            backgroundColor: '#e6ffed',
+            color: '#155724',
+            fontWeight: '600',
+            fontSize: '1rem',
+          }}
+        >
+          Запрос на редактирование отправлен.<br />
+          Комментарий: {editRequestComment}
+        </div>
+      )}
+
+      {/* Кнопки управления */}
       <div className="order-details-buttons">
         {canEdit && (
           <>
@@ -219,7 +271,7 @@ const OrderDetails = () => {
           </>
         )}
 
-        {!canEdit && userRole === 'исполнитель' && (
+        {!canEdit && canRespond && (
           <>
             <button onClick={handleRespond} disabled={sendingResponse}>
               Откликнуться
@@ -228,17 +280,9 @@ const OrderDetails = () => {
           </>
         )}
 
-        {!canEdit && userRole !== 'исполнитель' && (
+        {!canEdit && !canRespond && (
           <button onClick={() => navigate(-1)}>Закрыть</button>
         )}
-
-        {/* DEBUG-информация */}
-        <div style={{ marginTop: '1rem', fontSize: '0.85em', color: 'gray' }}>
-          <p>Роль: {userRole || 'не определена'}</p>
-          <p>canEdit: {String(canEdit)}</p>
-          <p>canRespond: {String(canRespond)}</p>
-          <p>isOwner: {String(isOwner)}</p>
-        </div>
       </div>
 
       {/* Модалка отклика */}
