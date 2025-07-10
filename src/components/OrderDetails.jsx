@@ -35,6 +35,10 @@ const OrderDetails = () => {
   const [sendingEditRequest, setSendingEditRequest] = useState(false);
   const [editRequestSent, setEditRequestSent] = useState(false);
 
+  const [showRespondModal, setShowRespondModal] = useState(false);
+  const [responseMessage, setResponseMessage] = useState('');
+  const [sendingResponse, setSendingResponse] = useState(false);
+
   const regionRef = useRef(null);
   const cityRef = useRef(null);
 
@@ -81,7 +85,6 @@ const OrderDetails = () => {
           : `/api/orders/${id}`;
         const res = await axiosInstance.get(endpoint);
         setOrder(res.data.order);
-        // Если есть уже запрос на редактирование, показываем статус
         if (res.data.order.edit_request) {
           setEditRequestSent(true);
           setEditRequestComment(res.data.order.edit_reason || '');
@@ -191,12 +194,27 @@ const OrderDetails = () => {
     }
   };
 
-  const handleRespond = async () => {
+  // Открытие модалки отклика
+  const handleRespond = () => {
+    setShowRespondModal(true);
+  };
+
+  // Отправка отклика с сообщением
+  const handleSendResponse = async () => {
+    if (!responseMessage.trim()) {
+      alert('Введите сообщение');
+      return;
+    }
+    setSendingResponse(true);
     try {
-      await axiosInstance.post(`/api/orders/${id}/respond`);
+      await axiosInstance.post(`/api/orders/${id}/respond`, { message: responseMessage });
       alert('Отклик отправлен');
-    } catch {
+      setShowRespondModal(false);
+      setResponseMessage('');
+    } catch (e) {
       alert('Ошибка при отклике');
+    } finally {
+      setSendingResponse(false);
     }
   };
 
@@ -217,6 +235,30 @@ const OrderDetails = () => {
   if (loading) return <p>Загрузка...</p>;
   if (error) return <p>{error}</p>;
   if (!order) return <p>Заявка не найдена</p>;
+
+  // Модалка отклика
+  const RespondModal = () => (
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h3>Откликнуться на заявку</h3>
+        <textarea
+          rows={4}
+          placeholder="Введите сопроводительное сообщение"
+          value={responseMessage}
+          onChange={(e) => setResponseMessage(e.target.value)}
+          disabled={sendingResponse}
+        />
+        <div className="modal-buttons">
+          <button onClick={handleSendResponse} disabled={sendingResponse}>
+            {sendingResponse ? 'Отправляем...' : 'Отправить'}
+          </button>
+          <button onClick={() => setShowRespondModal(false)} disabled={sendingResponse}>
+            Отмена
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="order-details-container">
@@ -355,6 +397,9 @@ const OrderDetails = () => {
         )}
         {!canEdit && !canRespond && <button onClick={() => navigate(-1)}>Закрыть</button>}
       </div>
+
+      {/* Модалка отклика */}
+      {showRespondModal && <RespondModal />}
     </div>
   );
 };
