@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './OrderDetails.css';
+import styles from './OrderDetails.module.css';
 
 const DADATA_TOKEN = '5e46733e57b90c869ea439c02ecfb79dda4e6d3e';
 
@@ -67,7 +67,6 @@ const OrderDetails = () => {
   const userRole = getUserRole();
   const userId = getUserId();
 
-  // Права
   const canEdit = userRole === 'admin' || userRole === 'moderator';
   const canRespond = userRole === 'исполнитель';
   const isOwner = order?.user_id === userId;
@@ -194,12 +193,10 @@ const OrderDetails = () => {
     }
   };
 
-  // Открытие модалки отклика
   const handleRespond = () => {
     setShowRespondModal(true);
   };
 
-  // Отправка отклика с сообщением
   const handleSendResponse = async () => {
     if (!responseMessage.trim()) {
       alert('Введите сообщение');
@@ -236,23 +233,31 @@ const OrderDetails = () => {
   if (error) return <p>{error}</p>;
   if (!order) return <p>Заявка не найдена</p>;
 
-  // Модалка отклика
   const RespondModal = () => (
-    <div className="modal-overlay">
-      <div className="modal-content">
-        <h3>Откликнуться на заявку</h3>
+    <div className={styles.orderDetails_modalOverlay}>
+      <div className={styles.orderDetails_modalContent}>
+        <h3 className={styles.orderDetails_modalTitle}>Откликнуться на заявку</h3>
         <textarea
+          className={styles.orderDetails_modalTextarea}
           rows={4}
           placeholder="Введите сопроводительное сообщение"
           value={responseMessage}
           onChange={(e) => setResponseMessage(e.target.value)}
           disabled={sendingResponse}
         />
-        <div className="modal-buttons">
-          <button onClick={handleSendResponse} disabled={sendingResponse}>
+        <div className={styles.orderDetails_modalButtons}>
+          <button
+            className={styles.orderDetails_modalButtonPrimary}
+            onClick={handleSendResponse}
+            disabled={sendingResponse}
+          >
             {sendingResponse ? 'Отправляем...' : 'Отправить'}
           </button>
-          <button onClick={() => setShowRespondModal(false)} disabled={sendingResponse}>
+          <button
+            className={styles.orderDetails_modalButtonSecondary}
+            onClick={() => setShowRespondModal(false)}
+            disabled={sendingResponse}
+          >
             Отмена
           </button>
         </div>
@@ -261,93 +266,184 @@ const OrderDetails = () => {
   );
 
   return (
-    <div className="order-details-container">
-      <h1>Заявка #{order.id}</h1>
-      <div className="order-details-grid">
-        <label>
+    <div className={styles.orderDetails_root}>
+      <h1 className={styles.orderDetails_title}>Заявка #{order.id}</h1>
+      <div className={styles.orderDetails_grid}>
+        <label className={styles.orderDetails_label}>
           Заголовок:
-          <input type="text" name="title" value={order.title || ''} onChange={handleChange} disabled={!canEdit} />
+          <input
+            className={styles.orderDetails_input}
+            type="text"
+            name="title"
+            value={order.title || ''}
+            onChange={handleChange}
+            disabled={!canEdit}
+          />
         </label>
 
-        <label>
+        <label className={styles.orderDetails_label}>
           Категория:
-          <select name="category" value={order.category || ''} onChange={handleChange} disabled={!canEdit}>
+          <select
+            className={styles.orderDetails_select}
+            name="category"
+            value={order.category || ''}
+            onChange={handleChange}
+            disabled={!canEdit}
+          >
             <option value="">Выберите категорию</option>
-            {categories.map(cat => <option key={cat} value={cat}>{cat}</option>)}
+            {categories.map(cat => (
+              <option key={cat} value={cat}>{cat}</option>
+            ))}
           </select>
         </label>
 
-        <label>
+        <label className={styles.orderDetails_label}>
           Бюджет:
-          <input type="number" name="budget" value={order.budget || ''} onChange={handleChange} disabled={!canEdit} />
+          <input
+            className={styles.orderDetails_input}
+            type="number"
+            name="budget"
+            value={order.budget || ''}
+            onChange={handleChange}
+            disabled={!canEdit}
+          />
         </label>
 
-        <label>
+        <label className={styles.orderDetails_label}>
           Статус модерации:
-          <select name="moderation_status" value={order.moderation_status || ''} onChange={handleChange} disabled={!canEdit}>
+          <select
+            className={styles.orderDetails_select}
+            name="moderation_status"
+            value={order.moderation_status || ''}
+            onChange={handleChange}
+            disabled={!canEdit}
+          >
             <option value="pending">Ожидает</option>
             <option value="approved">Одобрена</option>
             <option value="rejected">Отклонена</option>
           </select>
         </label>
 
-        <label>
+        <label className={styles.orderDetails_label}>
           Описание:
-          <textarea name="description" rows={4} value={order.description || ''} onChange={handleChange} disabled={!canEdit} />
+          <textarea
+            className={styles.orderDetails_textarea}
+            name="description"
+            rows={4}
+            value={order.description || ''}
+            onChange={handleChange}
+            disabled={!canEdit}
+          />
         </label>
 
-        <label>
+        <label className={styles.orderDetails_label}>
           Дедлайн:
-          <input type="date" name="deadline" value={order.deadline?.slice(0, 10) || ''} onChange={handleChange} disabled={!canEdit} />
+          <input
+            className={styles.orderDetails_input}
+            type="date"
+            name="deadline"
+            value={order.deadline?.slice(0, 10) || ''}
+            onChange={handleChange}
+            disabled={!canEdit}
+          />
         </label>
 
-        <div className="autocomplete" ref={regionRef}>
-          <label>Регион:
-            <input type="text" name="region" value={order.region || ''} onChange={handleChange} onFocus={() => setShowRegionSuggestions(true)} disabled={!canEdit} />
+        <div className={`${styles.orderDetails_autocomplete}`} ref={regionRef}>
+          <label className={styles.orderDetails_label}>
+            Регион:
+            <input
+              className={styles.orderDetails_input}
+              type="text"
+              name="region"
+              value={order.region || ''}
+              onChange={handleChange}
+              onFocus={() => setShowRegionSuggestions(true)}
+              disabled={!canEdit}
+            />
           </label>
           {showRegionSuggestions && regionSuggestions.length > 0 && (
-            <ul className="suggestions-list">
+            <ul className={styles.orderDetails_suggestionsList}>
               {regionSuggestions.map(region => (
-                <li key={region} onClick={() => handleRegionSelect(region)}>{region}</li>
+                <li
+                  key={region}
+                  className={styles.orderDetails_suggestionsListItem}
+                  onClick={() => handleRegionSelect(region)}
+                >
+                  {region}
+                </li>
               ))}
             </ul>
           )}
         </div>
 
-        <div className="autocomplete" ref={cityRef}>
-          <label>Город:
-            <input type="text" name="city" value={order.city || ''} onChange={handleChange} onFocus={() => setShowCitySuggestions(true)} disabled={!canEdit || !order.region} placeholder={order.region ? '' : 'Сначала выберите регион'} />
+        <div className={`${styles.orderDetails_autocomplete}`} ref={cityRef}>
+          <label className={styles.orderDetails_label}>
+            Город:
+            <input
+              className={styles.orderDetails_input}
+              type="text"
+              name="city"
+              value={order.city || ''}
+              onChange={handleChange}
+              onFocus={() => setShowCitySuggestions(true)}
+              disabled={!canEdit || !order.region}
+              placeholder={order.region ? '' : 'Сначала выберите регион'}
+            />
           </label>
           {showCitySuggestions && citySuggestions.length > 0 && (
-            <ul className="suggestions-list">
+            <ul className={styles.orderDetails_suggestionsList}>
               {citySuggestions.map(city => (
-                <li key={city} onClick={() => handleCitySelect(city)}>{city}</li>
+                <li
+                  key={city}
+                  className={styles.orderDetails_suggestionsListItem}
+                  onClick={() => handleCitySelect(city)}
+                >
+                  {city}
+                </li>
               ))}
             </ul>
           )}
         </div>
 
-        <label>
+        <label className={styles.orderDetails_label}>
           Формат:
-          <select name="format" value={order.format || ''} onChange={handleChange} disabled={!canEdit}>
+          <select
+            className={styles.orderDetails_select}
+            name="format"
+            value={order.format || ''}
+            onChange={handleChange}
+            disabled={!canEdit}
+          >
             <option value="">Выберите формат</option>
             <option value="Удаленно">Удаленно</option>
             <option value="На месте">На месте</option>
           </select>
         </label>
 
-        <label>
+        <label className={styles.orderDetails_label}>
           Тип:
-          <select name="type" value={order.type || ''} onChange={handleChange} disabled={!canEdit}>
+          <select
+            className={styles.orderDetails_select}
+            name="type"
+            value={order.type || ''}
+            onChange={handleChange}
+            disabled={!canEdit}
+          >
             <option value="">Выберите тип</option>
             <option value="Разовая">Разовая</option>
             <option value="Долгосрочная">Долгосрочная</option>
           </select>
         </label>
 
-        <label>
+        <label className={styles.orderDetails_label}>
           Оплата:
-          <select name="payment" value={order.payment || ''} onChange={handleChange} disabled={!canEdit}>
+          <select
+            className={styles.orderDetails_select}
+            name="payment"
+            value={order.payment || ''}
+            onChange={handleChange}
+            disabled={!canEdit}
+          >
             <option value="">Выберите способ оплаты</option>
             <option value="Безналичный">Безналичный</option>
             <option value="Наличный">Наличный</option>
@@ -355,17 +451,18 @@ const OrderDetails = () => {
         </label>
       </div>
 
-      {/* Для владельца заявки — блок запроса на редактирование */}
       {!canEdit && isOwner && !editRequestSent && (
-        <div className="edit-request-section">
-          <h3>Запросить изменение заявки</h3>
+        <div className={styles.orderDetails_editRequestSection}>
+          <h3 className={styles.orderDetails_editRequestTitle}>Запросить изменение заявки</h3>
           <textarea
+            className={styles.orderDetails_editRequestTextarea}
             placeholder="Опишите, что хотите изменить"
             value={editRequestComment}
             onChange={(e) => setEditRequestComment(e.target.value)}
             rows={3}
           />
           <button
+            className={styles.orderDetails_editRequestButton}
             onClick={handleSendEditRequest}
             disabled={sendingEditRequest || !editRequestComment.trim()}
           >
@@ -374,31 +471,57 @@ const OrderDetails = () => {
         </div>
       )}
 
-      {/* Если уже отправлен запрос */}
       {!canEdit && isOwner && editRequestSent && (
-        <div className="edit-request-info">
-          <h3>Запрос на изменение отправлен модератору</h3>
+        <div className={styles.orderDetails_editRequestInfo}>
+          <h3 className={styles.orderDetails_editRequestTitle}>Запрос на изменение отправлен модератору</h3>
           <p><b>Комментарий:</b> {editRequestComment}</p>
         </div>
       )}
 
-      <div className="order-details-buttons">
+      <div className={styles.orderDetails_buttons}>
         {canEdit && (
           <>
-            <button onClick={handleSave} disabled={saving}>{saving ? 'Сохраняем...' : 'Сохранить'}</button>
-            <button onClick={() => navigate(-1)}>Закрыть</button>
+            <button
+              className={styles.orderDetails_button}
+              onClick={handleSave}
+              disabled={saving}
+            >
+              {saving ? 'Сохраняем...' : 'Сохранить'}
+            </button>
+            <button
+              className={styles.orderDetails_button}
+              onClick={() => navigate(-1)}
+            >
+              Закрыть
+            </button>
           </>
         )}
         {!canEdit && canRespond && (
           <>
-            <button onClick={handleRespond}>Откликнуться</button>
-            <button onClick={() => navigate(-1)}>Закрыть</button>
+            <button
+              className={styles.orderDetails_button}
+              onClick={handleRespond}
+            >
+              Откликнуться
+            </button>
+            <button
+              className={styles.orderDetails_button}
+              onClick={() => navigate(-1)}
+            >
+              Закрыть
+            </button>
           </>
         )}
-        {!canEdit && !canRespond && <button onClick={() => navigate(-1)}>Закрыть</button>}
+        {!canEdit && !canRespond && (
+          <button
+            className={styles.orderDetails_button}
+            onClick={() => navigate(-1)}
+          >
+            Закрыть
+          </button>
+        )}
       </div>
 
-      {/* Модалка отклика */}
       {showRespondModal && <RespondModal />}
     </div>
   );

@@ -1,15 +1,5 @@
-/* Фоновый слой всей страницы */
-body, html, #root {
-  margin: 0; padding: 0; height: 100%;
-  background: linear-gradient(135deg, #2980b9 0%, #6dd5fa 100%);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #2c3e50;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
 
-/* Контейнер всей страницы заказа */
-.order-details-container {
+.orderDetails_root {
   max-width: 1100px;
   min-height: 100vh;
   margin: 0 auto;
@@ -21,10 +11,11 @@ body, html, #root {
   flex-direction: column;
   gap: 36px;
   user-select: none;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2c3e50;
 }
 
-/* Заголовок */
-.order-details-container > h1 {
+.orderDetails_title {
   margin: 0 auto;
   font-size: 3.2rem;
   font-weight: 800;
@@ -34,15 +25,13 @@ body, html, #root {
   text-align: center;
 }
 
-/* Сетка для полей заказа */
-.order-details-grid {
+.orderDetails_grid {
   display: grid;
   grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
   gap: 28px 32px;
 }
 
-/* Лейблы */
-label {
+.orderDetails_label {
   display: flex;
   flex-direction: column;
   font-weight: 700;
@@ -51,12 +40,9 @@ label {
   user-select: text;
 }
 
-/* Общий стиль для input, select и textarea */
-input[type="text"],
-input[type="number"],
-input[type="date"],
-select,
-textarea {
+.orderDetails_input,
+.orderDetails_select,
+.orderDetails_textarea {
   margin-top: 8px;
   padding: 14px 18px;
   font-size: 1.1rem;
@@ -71,21 +57,15 @@ textarea {
   user-select: text;
 }
 
-/* Стили при фокусе */
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="date"]:focus,
-select:focus,
-textarea:focus {
+.orderDetails_input:focus,
+.orderDetails_select:focus,
+.orderDetails_textarea:focus {
   outline: none;
   border-color: #1b4f72;
   box-shadow: 0 0 12px rgba(27,79,114,0.8);
 }
 
-/* Заблокированные поля выглядят как текст */
-input[disabled],
-select[disabled],
-textarea[disabled] {
+.orderDetails_disabled {
   background-color: transparent !important;
   border: none !important;
   box-shadow: none !important;
@@ -96,12 +76,11 @@ textarea[disabled] {
   user-select: text;
 }
 
-/* Автокомплит список подсказок */
-.autocomplete {
+.orderDetails_autocomplete {
   position: relative;
 }
 
-.suggestions-list {
+.orderDetails_suggestionsList {
   position: absolute;
   top: 100%;
   left: 0;
@@ -118,7 +97,7 @@ textarea[disabled] {
   list-style: none;
 }
 
-.suggestions-list li {
+.orderDetails_suggestionsListItem {
   padding: 10px 18px;
   cursor: pointer;
   font-size: 1rem;
@@ -126,14 +105,13 @@ textarea[disabled] {
   transition: background-color 0.22s ease;
 }
 
-.suggestions-list li:hover {
+.orderDetails_suggestionsListItem:hover {
   background-color: #2980b9;
   color: white;
 }
 
-/* Блок запроса редактирования */
-.edit-request-section,
-.edit-request-info {
+.orderDetails_editRequestSection,
+.orderDetails_editRequestInfo {
   background: #d6eaf8;
   border-radius: 18px;
   padding: 24px 28px;
@@ -141,8 +119,7 @@ textarea[disabled] {
   user-select: text;
 }
 
-.edit-request-section h3,
-.edit-request-info h3 {
+.orderDetails_editRequestTitle {
   margin-top: 0;
   font-size: 1.4rem;
   font-weight: 700;
@@ -150,7 +127,7 @@ textarea[disabled] {
   user-select: text;
 }
 
-.edit-request-section textarea {
+.orderDetails_editRequestTextarea {
   margin-top: 14px;
   min-height: 80px;
   border-radius: 14px;
@@ -162,13 +139,12 @@ textarea[disabled] {
   transition: border-color 0.3s ease;
 }
 
-.edit-request-section textarea:focus {
+.orderDetails_editRequestTextarea:focus {
   border-color: #1b4f72;
   box-shadow: 0 0 10px rgba(27,79,114,0.8);
 }
 
-/* Кнопка запроса */
-.edit-request-section button {
+.orderDetails_editRequestButton {
   margin-top: 16px;
   background-color: #2980b9;
   color: white;
@@ -180,20 +156,20 @@ textarea[disabled] {
   cursor: pointer;
   transition: background-color 0.25s ease;
   user-select: none;
+  border: none;
 }
 
-.edit-request-section button:hover:not(:disabled) {
+.orderDetails_editRequestButton:hover:not(:disabled) {
   background-color: #1b4f72;
 }
 
-.edit-request-section button:disabled {
+.orderDetails_editRequestButton:disabled {
   background-color: #a0bcd4;
   cursor: not-allowed;
   box-shadow: none;
 }
 
-/* Кнопки управления внизу */
-.order-details-buttons {
+.orderDetails_buttons {
   display: flex;
   justify-content: center;
   gap: 22px;
@@ -201,7 +177,7 @@ textarea[disabled] {
   margin-top: 12px;
 }
 
-.order-details-buttons button {
+.orderDetails_button {
   background-color: #2980b9;
   color: white;
   padding: 14px 38px;
@@ -216,19 +192,18 @@ textarea[disabled] {
   min-width: 140px;
 }
 
-.order-details-buttons button:hover:not(:disabled) {
+.orderDetails_button:hover:not(:disabled) {
   background-color: #1b4f72;
   box-shadow: 0 14px 36px rgba(27,79,114,0.7);
 }
 
-.order-details-buttons button:disabled {
+.orderDetails_button:disabled {
   background-color: #a0bcd4;
   cursor: not-allowed;
   box-shadow: none;
 }
 
-/* Модальное окно отклика */
-.modal-overlay {
+.orderDetails_modalOverlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
   background: rgba(41, 128, 185, 0.7);
@@ -239,7 +214,7 @@ textarea[disabled] {
   user-select: none;
 }
 
-.modal-content {
+.orderDetails_modalContent {
   background: white;
   width: 100%;
   max-width: 480px;
@@ -252,14 +227,14 @@ textarea[disabled] {
   user-select: text;
 }
 
-.modal-content h3 {
+.orderDetails_modalTitle {
   margin: 0;
   font-size: 1.6rem;
   font-weight: 700;
   color: #2980b9;
 }
 
-.modal-content textarea {
+.orderDetails_modalTextarea {
   font-size: 1.15rem;
   padding: 14px 18px;
   border-radius: 16px;
@@ -269,86 +244,84 @@ textarea[disabled] {
   transition: border-color 0.3s ease;
 }
 
-.modal-content textarea:focus {
+.orderDetails_modalTextarea:focus {
   border-color: #2980b9;
   box-shadow: 0 0 12px rgba(41,128,185,0.6);
   outline: none;
 }
 
-.modal-buttons {
+.orderDetails_modalButtons {
   display: flex;
   justify-content: flex-end;
   gap: 18px;
 }
 
-.modal-buttons button {
+.orderDetails_modalButtonPrimary {
   padding: 12px 32px;
   font-weight: 700;
   font-size: 1.1rem;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(41,128,185,0.4);
   user-select: none;
-}
-
-.modal-buttons button:first-child {
   background-color: #27ae60;
   color: white;
-  box-shadow: 0 8px 20px rgba(39,174,96,0.5);
   border: none;
   cursor: pointer;
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.modal-buttons button:first-child:hover:not(:disabled) {
+.orderDetails_modalButtonPrimary:hover:not(:disabled) {
   background-color: #1e8449;
   box-shadow: 0 10px 25px rgba(30,132,73,0.7);
 }
 
-.modal-buttons button:last-child {
+.orderDetails_modalButtonSecondary {
+  padding: 12px 32px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border-radius: 16px;
+  user-select: none;
   background-color: #bdc3c7;
   color: #2c3e50;
   border: none;
   cursor: pointer;
   box-shadow: none;
+  transition: background-color 0.25s ease;
 }
 
-.modal-buttons button:last-child:hover:not(:disabled) {
+.orderDetails_modalButtonSecondary:hover:not(:disabled) {
   background-color: #95a5a6;
 }
 
-.modal-buttons button:disabled {
+.orderDetails_modalButtonDisabled {
   background-color: #c7d2de;
   cursor: not-allowed;
   box-shadow: none;
 }
 
-/* Отступы снизу страницы */
-.order-details-container {
-  padding-bottom: 72px;
-}
-
-/* Подсказки debug */
-.order-details-container > div[style*="gray"] p {
-  margin: 3px 0;
-  font-size: 0.9rem;
-  color: #7f8c8d;
+/* Debug info */
+.orderDetails_debugInfo {
+  margin-top: 1rem;
+  font-size: 0.85em;
+  color: gray;
   user-select: text;
 }
 
-/* Адаптив для маленьких экранов */
+/* Responsive */
 @media (max-width: 620px) {
-  .order-details-container {
+  .orderDetails_root {
     padding: 24px 20px 48px;
     border-radius: 18px;
   }
-  .order-details-grid {
+  .orderDetails_grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  .order-details-buttons {
+  .orderDetails_buttons {
     flex-direction: column;
     gap: 14px;
   }
-  .order-details-buttons button {
+  .orderDetails_button {
     width: 100%;
     min-width: unset;
   }
