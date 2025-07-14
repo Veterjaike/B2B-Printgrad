@@ -3,3 +3,6 @@ dist
 .git
 *.md
 node_modules
+.DS_Store
+.DS_Store
+public/.DS_Store
