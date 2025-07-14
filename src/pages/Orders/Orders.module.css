@@ -1,0 +1,49 @@
+/* src/pages/Orders/Orders.module.css */
+.orders {
+  padding: 20px;
+  background: #fbfeff;
+  min-height: 100vh;
+  color: #000000;
+}
+
+.ordersContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  gap: 30px;
+}
+
+.ordersFilterContainer {
+  width: 300px;
+  background: #f1faff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+  height: fit-content;
+  position: sticky;
+  top: 20px;
+}
+
+.ordersListContainer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.ordersLoading,
+.ordersError {
+  font-size: 1rem;
+  color: #333;
+}
+
+@media (max-width: 900px) {
+  .ordersContainer {
+    flex-direction: column;
+  }
+
+  .ordersFilterContainer {
+    width: 100%;
+    position: relative;
+    top: auto;
+    margin-bottom: 25px;
+  }
+}

@@ -1,0 +1,31 @@
+.wrapper {
+  padding: 20px;
+  background-color: #f9fcff;
+  min-height: 100vh;
+  border-radius: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  padding: 40px 0;
+  color: #555;
+}
+
+.error {
+  background-color: #ffe5e5;
+  color: #a00;
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.message {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 40px;
+  color: #777;
+}

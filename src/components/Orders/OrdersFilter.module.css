@@ -1,0 +1,60 @@
+/* src/components/OrdersFilter.module.css */
+.ordersFilter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.filterGroup label {
+  font-weight: 600;
+  font-size: 12px;
+  margin-bottom: 12px;
+  color: #000000;
+}
+
+.categoriesList {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  max-height: none;
+  overflow: visible;
+}
+
+.categoryItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.categoryItem input[type="checkbox"] {
+  cursor: pointer;
+  width: 14px;
+  height: 14px;
+}
+
+.categoryFilterHeading {
+  display: block;
+  font-size: 20px;
+  margin: 0 auto 20px;
+  text-align: center;
+}
+
+.regionSelect {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+  font-size: 0.8rem;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.regionSelect:focus {
+  outline: none;
+  border-color: #007bff;
+}
