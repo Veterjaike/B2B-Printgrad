@@ -13,15 +13,15 @@ const MyOrdersPage = () => {
         setIsLoading(true);
         const token = localStorage.getItem('token');
 
-        const res = await fetch('https://b2b.printgrad.ru/api/orders/my-orders', {
-          headers: { Authorization: `Bearer ${token}` }
+        const res = await fetch('https://b2b.printgrad.ru/api/orders/my', {
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         if (!res.ok) throw new Error('Ошибка загрузки заказов');
 
         const data = await res.json();
-        const ordersArray = Array.isArray(data) ? data : data.orders;
-        setOrders(ordersArray);
+        // В респонсе { orders: [...] } - так у тебя на сервере
+        setOrders(data.orders || []);
       } catch (err) {
         console.error(err);
         setError('Не удалось загрузить заказы');
