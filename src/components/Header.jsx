@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import ChatButton from '../components/Chat//ChatButton';
+import ChatModal from '../components/Chat/ChatModal';
 import './Header.css';
 
 function parseJwt(token) {
@@ -21,6 +23,7 @@ function parseJwt(token) {
 export default function Header() {
   const token = localStorage.getItem('token');
   const user = token ? parseJwt(token) : null;
+  const [isChatOpen, setChatOpen] = useState(false);
 
   return (
     <header className='header'>
@@ -49,6 +52,13 @@ export default function Header() {
             </Link>
           )}
           <Link className='header__nav-link btn' to="/profile">Профиль</Link>
+
+          {user && (
+            <>
+              <ChatButton onClick={() => setChatOpen(true)} />
+              <ChatModal isOpen={isChatOpen} onClose={() => setChatOpen(false)} />
+            </>
+          )}
         </div>
       </div>
     </header>

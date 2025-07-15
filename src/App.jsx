@@ -3,6 +3,7 @@ import { Routes, Route, useLocation } from 'react-router-dom';
 import ProtectedRoute from './pages/RegPage/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import Header from './components/Header';
+import { ChatProvider } from './components/Chat/ChatContext';
 import './App.css';
 import { Home, Profile } from './pages';
 import Footer from './components/Footer';
@@ -24,7 +25,7 @@ function App() {
   }, [location.pathname]);
 
   return (
-    <>
+    <ChatProvider>
       <Header />
       <main className={`page-transition ${fade ? 'fade-in' : 'fade-out'}`}>
         <Routes location={location}>
@@ -42,14 +43,13 @@ function App() {
           {/* 🔐 Только для admin/moderator */}
           <Route element={<AdminRoute />}>
             <Route path="admin" element={<AdminPanel />} />
-            
           </Route>
 
           <Route path="registration" element={<RegPage />} />
         </Routes>
       </main>
       <Footer />
-    </>
+    </ChatProvider>
   );
 }
 

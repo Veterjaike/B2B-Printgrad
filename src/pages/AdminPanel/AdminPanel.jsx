@@ -42,7 +42,7 @@ const AdminPanel = () => {
   const fetchAllUsers = async () => {
     setLoadingAllUsers(true);
     try {
-      const res = await axiosInstance.get('/api/admin/users');
+      const res = await axiosInstance.get('https://b2b.printgrad.ru/api/admin/users');
       console.log('fetchAllUsers data:', res.data);
       if (Array.isArray(res.data.users)) {
         setAllUsers(res.data.users);
@@ -63,7 +63,7 @@ const AdminPanel = () => {
   const fetchOrders = async () => {
     setLoadingOrders(true);
     try {
-      const res = await axiosInstance.get('/api/moderator/orders/pending');
+      const res = await axiosInstance.get('https://b2b.printgrad.ru/api/moderator/orders/pending');
       console.log('fetchOrders data:', res.data);
       setOrders(Array.isArray(res.data.orders) ? res.data.orders : []);
     } catch (err) {
@@ -78,7 +78,7 @@ const AdminPanel = () => {
   const fetchEditRequests = async () => {
     setLoadingEditRequests(true);
     try {
-      const res = await axiosInstance.get('/api/moderator/orders/edit-requests');
+      const res = await axiosInstance.get('https://b2b.printgrad.ru/api/moderator/orders/edit-requests');
       console.log('fetchEditRequests data:', res.data);
       setEditRequests(Array.isArray(res.data.orders) ? res.data.orders : []);
     } catch (err) {
@@ -96,10 +96,10 @@ const AdminPanel = () => {
     fetchAllUsers();
   }, []);
 
-  // Получение полного профиля пользователя по ID (исправлен путь)
+  // Получение полного профиля пользователя по ID
   const fetchUserById = async (id) => {
     try {
-      const res = await axiosInstance.get(`/api/moderator/users/${id}`); // исправлено здесь
+      const res = await axiosInstance.get('https://b2b.printgrad.ru/api/moderator/users/${id}'); // исправлено здесь
       console.log('fetchUserById data:', res.data);
       return res.data.user || null;
     } catch (err) {
@@ -134,7 +134,7 @@ const AdminPanel = () => {
     if (!editingUser) return;
     setSavingUser(true);
     try {
-      await axiosInstance.patch(`/api/moderator/users/${editingUser.id}`, editForm);
+      await axiosInstance.patch(`https://b2b.printgrad.ru/api/moderator/users/${editingUser.id}`, editForm);
       setEditingUser(null);
       await fetchUsers();
       await fetchAllUsers();
@@ -164,7 +164,7 @@ const AdminPanel = () => {
   // Одобрить пользователя
   const approveUser = async (id) => {
     try {
-      await axiosInstance.patch(`/api/moderator/users/${id}/approve`);
+      await axiosInstance.patch(`https://b2b.printgrad.ru/api/moderator/users/${id}/approve`);
       await fetchUsers();
       await fetchAllUsers();
     } catch (err) {
@@ -176,7 +176,7 @@ const AdminPanel = () => {
   const deleteUser = async (id) => {
     if (!window.confirm('Вы уверены, что хотите удалить пользователя?')) return;
     try {
-      await axiosInstance.delete(`/api/moderator/users/${id}`); // исправлено здесь
+      await axiosInstance.delete(`https://b2b.printgrad.ru/api/moderator/users/${id}`); // исправлено здесь
       await fetchAllUsers();
       await fetchUsers();
     } catch (err) {
@@ -188,7 +188,7 @@ const AdminPanel = () => {
   // Одобрить заявку
   const approveOrder = async (id) => {
     try {
-      await axiosInstance.patch(`/api/moderator/orders/${id}/approve`);
+      await axiosInstance.patch(`https://b2b.printgrad.ru/api/moderator/orders/${id}/approve`);
       await fetchOrders();
       await fetchEditRequests();
     } catch (err) {
