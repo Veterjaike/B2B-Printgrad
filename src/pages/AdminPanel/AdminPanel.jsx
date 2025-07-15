@@ -27,7 +27,7 @@ const AdminPanel = () => {
   const fetchUsers = async () => {
     setLoadingUsers(true);
     try {
-      const res = await axiosInstance.get('/api/moderator/users/pending');
+      const res = await axiosInstance.get('https://b2b.printgrad.ru/api/moderator/users/pending');
       console.log('fetchUsers data:', res.data);
       setUsers(Array.isArray(res.data.users) ? res.data.users : []);
     } catch (err) {
