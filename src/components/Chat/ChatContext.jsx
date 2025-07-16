@@ -58,7 +58,7 @@ export const ChatProvider = ({ children }) => {
     // Загрузка чатов
     const loadChats = async () => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/chats`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/messages`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -77,7 +77,7 @@ export const ChatProvider = ({ children }) => {
         const fetchMessages = async () => {
             try {
                 const res = await fetch(
-                    `${import.meta.env.VITE_API_URL}/api/chats/${selectedChat.orderId}/${selectedChat.userId}`,
+                    `${import.meta.env.VITE_API_URL}/api/messages/${selectedChat.orderId}/${selectedChat.userId}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
