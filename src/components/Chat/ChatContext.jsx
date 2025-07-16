@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import io from 'socket.io-client';
 
 const ChatContext = createContext();
-
 export const useChat = () => useContext(ChatContext);
 
 export const ChatProvider = ({ children }) => {
@@ -11,13 +10,25 @@ export const ChatProvider = ({ children }) => {
     const [messages, setMessages] = useState([]);
     const [socket, setSocket] = useState(null);
 
-    const token = localStorage.getItem('token'); // или откуда у тебя JWT
+    const token = localStorage.getItem('token');
+
+    // Получаем ID пользователя из токена
+    const getUserIdFromToken = () => {
+        try {
+            const base64 = token.split('.')[1];
+            return JSON.parse(atob(base64)).id;
+        } catch {
+            return null;
+        }
+    };
+
+    const currentUserId = getUserIdFromToken();
 
     // Инициализация сокета
     useEffect(() => {
-        if (!token) return;
+        if (!token || !currentUserId) return;
 
-        const newSocket = io(`${import.meta.env.VITE_API_URL}/`, {
+        const newSocket = io(`${import.meta.env.VITE_API_URL}`, {
             auth: { token },
             transports: ['websocket'],
         });
@@ -26,12 +37,12 @@ export const ChatProvider = ({ children }) => {
             console.log('✅ Socket connected');
         });
 
-        newSocket.on('message', (message) => {
+        newSocket.on('newMessage', (message) => {
             const isInCurrentChat =
                 selectedChat &&
                 ((message.sender_id === selectedChat.userId &&
-                    message.receiver_id === parseInt(message.selfId)) ||
-                    (message.sender_id === parseInt(message.selfId) &&
+                    message.receiver_id === currentUserId) ||
+                    (message.sender_id === currentUserId &&
                         message.receiver_id === selectedChat.userId)) &&
                 message.order_id === selectedChat.orderId;
 
@@ -39,12 +50,15 @@ export const ChatProvider = ({ children }) => {
                 setMessages((prev) => [...prev, message]);
             }
 
-            // обновить последний месседж в списке чатов
             setChats((prev) =>
                 prev.map((chat) =>
                     chat.orderId === message.order_id &&
                         (chat.userId === message.sender_id || chat.userId === message.receiver_id)
-                        ? { ...chat, lastMessage: message.message, lastMessageTime: message.sent_at }
+                        ? {
+                            ...chat,
+                            lastMessage: message.message,
+                            lastMessageTime: message.sent_at,
+                        }
                         : chat
                 )
             );
@@ -53,7 +67,7 @@ export const ChatProvider = ({ children }) => {
         setSocket(newSocket);
 
         return () => newSocket.disconnect();
-    }, [token, selectedChat]);
+    }, [token, currentUserId, selectedChat]);
 
     // Загрузка чатов
     const loadChats = async () => {
@@ -64,20 +78,22 @@ export const ChatProvider = ({ children }) => {
                 },
             });
             const data = await res.json();
-            setChats(data);
+            console.log('📨 Загруженные чаты:', data);
+            setChats(Array.isArray(data) ? data : []);
         } catch (err) {
             console.error('Ошибка при загрузке чатов:', err);
+            setChats([]); // fallback
         }
     };
 
-    // Загрузка сообщений конкретного чата
+    // Загрузка сообщений для выбранного чата
     useEffect(() => {
         if (!selectedChat) return;
 
         const fetchMessages = async () => {
             try {
                 const res = await fetch(
-                    `${import.meta.env.VITE_API_URL}/api/messages/${selectedChat.orderId}/${selectedChat.userId}`,
+                    `${import.meta.env.VITE_API_URL}/api/messages/${selectedChat.orderId}/chat/${selectedChat.userId}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -85,21 +101,23 @@ export const ChatProvider = ({ children }) => {
                     }
                 );
                 const data = await res.json();
-                setMessages(data);
+                setMessages(Array.isArray(data) ? data : []);
             } catch (err) {
                 console.error('Ошибка при загрузке сообщений:', err);
+                setMessages([]);
             }
         };
 
         fetchMessages();
-    }, [selectedChat]);
+    }, [selectedChat, token]);
 
-    // Отправка сообщения
+    // Отправка сообщения через сокет
     const sendMessage = (chat, text) => {
-        if (!socket || !text) return;
+        if (!socket || !text || !currentUserId) return;
 
-        socket.emit('message', {
+        socket.emit('sendMessage', {
             orderId: chat.orderId,
+            senderId: currentUserId,
             receiverId: chat.userId,
             message: text,
         });
