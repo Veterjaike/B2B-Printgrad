@@ -37,6 +37,7 @@ export const ChatProvider = ({ children }) => {
             console.log('✅ Socket connected');
         });
 
+        // Приход нового сообщения
         newSocket.on('newMessage', (message) => {
             const isInCurrentChat =
                 selectedChat &&
@@ -50,10 +51,11 @@ export const ChatProvider = ({ children }) => {
                 setMessages((prev) => [...prev, message]);
             }
 
+            // Обновляем последний месседж в списке чатов
             setChats((prev) =>
                 prev.map((chat) =>
                     chat.orderId === message.order_id &&
-                        (chat.userId === message.sender_id || chat.userId === message.receiver_id)
+                    (chat.userId === message.sender_id || chat.userId === message.receiver_id)
                         ? {
                             ...chat,
                             lastMessage: message.message,
@@ -78,7 +80,6 @@ export const ChatProvider = ({ children }) => {
                 },
             });
             const data = await res.json();
-            console.log('📨 Загруженные чаты:', data);
             setChats(Array.isArray(data) ? data : []);
         } catch (err) {
             console.error('Ошибка при загрузке чатов:', err);
